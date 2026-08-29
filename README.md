@@ -269,7 +269,18 @@ dart format --output=none --set-exit-if-changed lib test
 ```
 
 CI: [.github/workflows/flutter-ci.yml](.github/workflows/flutter-ci.yml) —
-analyze, format check and tests on every push, then a debug APK build.
+analyze, format check and tests on every push, then an Android build that
+uploads two artifacts:
+
+| Artifact | What it is |
+| --- | --- |
+| `rawnq-debug-apk` | `app-debug.apk` |
+| `rawnq-release-apk-debug-signed` | `app-release.apk`, **signed with the debug key** |
+
+Flutter's generated Gradle config signs release builds with the debug keystore
+when no release keystore is configured, so the second artifact installs and
+runs but **must not be distributed**. A distributable build needs a real
+keystore — see [Building](#building).
 
 ## Branding assets
 

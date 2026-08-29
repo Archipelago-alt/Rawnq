@@ -340,6 +340,31 @@ void main() {
       );
     });
 
+    test('a failure after the tenant loads propagates without unhandled errors',
+        () async {
+      // Every catalogue request fails at once. Future.wait surfaces the first;
+      // the rest must not escape as unhandled async errors.
+      final adapter = _FakeAdapter((options) {
+        if (options.path.endsWith('/tenants')) return <dynamic>[_tenantRow()];
+        return DioException(
+          requestOptions: options,
+          type: DioExceptionType.connectionError,
+        );
+      });
+      final dio = Dio()..httpClientAdapter = adapter;
+
+      await expectLater(
+        RemoteCatalogRepository(client: ApiClient(config: _config, dio: dio))
+            .loadCatalog(),
+        throwsA(
+          isA<Failure>().having((f) => f.kind, 'kind', FailureKind.offline),
+        ),
+      );
+
+      // Give any stray error a turn to surface before the test ends.
+      await Future<void>.delayed(Duration.zero);
+    });
+
     test('results are cached until the TTL expires, and forceRefresh bypasses it',
         () async {
       var tenantCalls = 0;

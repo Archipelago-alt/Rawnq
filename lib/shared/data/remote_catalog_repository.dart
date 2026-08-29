@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../../core/network/api_client.dart';
 import '../../core/utils/result.dart';
 import '../models/catalog.dart';
@@ -36,7 +38,7 @@ class RemoteCatalogRepository implements CatalogRepository {
     final tenant = _client.tenantFilter(store.id);
 
     // Independent requests, so run them together rather than in sequence.
-    final results = await Future.wait(<Future<List<Map<String, dynamic>>>>[
+    final requests = <Future<List<Map<String, dynamic>>>>[
       _client.selectAll('categories', query: <String, String>{
         ...tenant,
         'select': '*',
@@ -71,7 +73,16 @@ class RemoteCatalogRepository implements CatalogRepository {
         'select': '*',
         'is_active': 'eq.true',
       }),
-    ]);
+    ];
+
+    // Future.wait surfaces only the first error; without a listener on each
+    // future, a second concurrent failure is reported as an unhandled async
+    // error. Attaching one marks them handled — the first still propagates.
+    for (final request in requests) {
+      unawaited(request.catchError((_) => const <Map<String, dynamic>>[]));
+    }
+
+    final results = await Future.wait(requests);
 
     final variantsByProduct = <String, List<ProductVariant>>{};
     for (final row in results[3]) {
