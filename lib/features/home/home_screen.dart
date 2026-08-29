@@ -40,7 +40,7 @@ class HomeScreen extends ConsumerWidget {
                         children: List<Widget>.generate(
                           4,
                           (_) => const Padding(
-                            padding: EdgeInsets.only(left: RawnqSpace.md),
+                            padding: EdgeInsetsDirectional.only(start: RawnqSpace.md),
                             child: ShimmerBox(width: 88, height: 108),
                           ),
                         ),
@@ -63,7 +63,12 @@ class HomeScreen extends ConsumerWidget {
     final newArrivals = catalog.newArrivals;
 
     return <Widget>[
-      SliverToBoxAdapter(child: HomeHero(store: catalog.store)),
+      SliverToBoxAdapter(
+        child: HomeHero(
+          store: catalog.store,
+          onContactPressed: () => context.push(Routes.contact),
+        ),
+      ),
       if (catalog.categories.isNotEmpty) ...<Widget>[
         SliverToBoxAdapter(
           child: SectionHeader(

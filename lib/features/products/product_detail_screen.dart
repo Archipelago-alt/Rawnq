@@ -137,11 +137,12 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   /// Maps the current selection onto a concrete variant, if it is complete.
   ProductVariant? _resolveVariant(Product product) {
     if (!product.hasVariants) return null;
-    final color = _color;
-    if (color == null) return null;
-    final sizes = product.sizesFor(color);
+    // A product may offer sizes without colours, so only require a colour
+    // when the product actually has a colour axis.
+    if (product.hasColors && _color == null) return null;
+    final sizes = product.sizesFor(_color);
     if (sizes.isNotEmpty && _size == null) return null;
-    return product.findVariant(color: color, size: _size);
+    return product.findVariant(color: _color, size: _size);
   }
 
   void _toast(String message, {SnackBarAction? action}) {
@@ -187,7 +188,9 @@ class _DetailBody extends ConsumerWidget {
         ? selectedVariant.price
         : product.displayPrice;
     final available = selectedVariant?.inStock ?? product.inStock;
-    final sizes = product.sizesFor(color);
+    final sizes = product.hasColors && color == null
+        ? const <String>[]
+        : product.sizesFor(color);
     final material = selectedVariant?.material ??
         (product.variants.isEmpty ? null : product.variants.first.material);
 

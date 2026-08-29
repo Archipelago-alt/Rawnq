@@ -8,9 +8,10 @@ import '../../../shared/models/store_info.dart';
 /// Branded banner at the top of the home screen: the real RAWNQ logo on the
 /// cream ground taken from the shop's own artwork, with the store's slogan.
 class HomeHero extends StatelessWidget {
-  const HomeHero({super.key, required this.store});
+  const HomeHero({super.key, required this.store, required this.onContactPressed});
 
   final StoreInfo store;
+  final VoidCallback onContactPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class HomeHero extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(
         RawnqSpace.lg,
-        RawnqSpace.xl,
+        RawnqSpace.sm,
         RawnqSpace.lg,
         RawnqSpace.xl,
       ),
@@ -34,6 +35,14 @@ class HomeHero extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: IconButton(
+              onPressed: onContactPressed,
+              tooltip: l10n.navContact,
+              icon: const Icon(Icons.support_agent_rounded, color: RawnqColors.brown),
+            ),
+          ),
           // The official logo asset, used unmodified.
           ClipOval(
             child: Image.asset(

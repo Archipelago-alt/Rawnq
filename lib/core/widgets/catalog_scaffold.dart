@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../app/providers.dart';
 import '../../app/theme.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/models/catalog.dart';
+import '../network/connectivity.dart';
 import 'state_views.dart';
 
 /// Wraps a screen that needs the catalogue.
@@ -50,10 +52,30 @@ class CatalogView extends ConsumerWidget {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: <Widget>[
+            const _OfflineNotice(),
             if (!data.isLiveData) _LocalDataNotice(catalog: data),
             ...builder(context, data),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Warns that the device has no network, so stale cached content and missing
+/// product photos have an explanation.
+class _OfflineNotice extends ConsumerWidget {
+  const _OfflineNotice();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!ref.watch(isOfflineProvider)) return const SliverToBoxAdapter();
+    return SliverToBoxAdapter(
+      child: NoticeBanner(
+        icon: Icons.wifi_off_rounded,
+        message: AppLocalizations.of(context).offlineBannerTitle,
+        background: RawnqColors.sale,
+        foreground: Colors.white,
       ),
     );
   }

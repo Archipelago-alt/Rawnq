@@ -28,7 +28,9 @@ class CartAddResult {
 class CartController extends Notifier<List<CartItem>> {
   static const String storageKey = 'rawnq.cart.v1';
 
-  late final SharedPreferences _prefs;
+  // Not `late final`: Riverpod rebuilds a Notifier when a watched provider
+  // changes, and a second assignment to a late final field would throw.
+  late SharedPreferences _prefs;
 
   @override
   List<CartItem> build() {
