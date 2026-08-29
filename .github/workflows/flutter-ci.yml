@@ -38,13 +38,35 @@ jobs:
       - name: Verify formatting
         # Generated localisations are excluded: they are produced by the
         # previous step and are not checked in.
-        run: dart format --output=none --set-exit-if-changed lib test
+        run: |
+          set -o pipefail
+          if ! dart format --output=none --set-exit-if-changed lib test 2>&1 | tee /tmp/fmt.log; then
+            grep -E '^Changed ' /tmp/fmt.log | head -50 | while IFS= read -r line; do
+              echo "::error::$line"
+            done
+            echo "::error::Run 'dart format lib test' and commit the result."
+            exit 1
+          fi
 
       - name: Analyze
-        run: flutter analyze --no-fatal-infos
+        run: |
+          set -o pipefail
+          if ! flutter analyze --no-fatal-infos 2>&1 | tee /tmp/analyze.log; then
+            grep -E '^\s*(error|warning)' /tmp/analyze.log | head -50 | while IFS= read -r line; do
+              echo "::error::$line"
+            done
+            exit 1
+          fi
 
       - name: Run tests
-        run: flutter test --reporter expanded
+        run: |
+          set -o pipefail
+          if ! flutter test --reporter expanded 2>&1 | tee /tmp/test.log; then
+            grep -E '^(\s*)(Error|Failed|.*: [0-9]+:[0-9]+: Error)' /tmp/test.log | head -50 \
+              | while IFS= read -r line; do echo "::error::$line"; done
+            tail -30 /tmp/test.log | while IFS= read -r line; do echo "::error::$line"; done
+            exit 1
+          fi
 
   build-android:
     name: Build Android APK
@@ -99,7 +121,20 @@ jobs:
           fi
 
       - name: Build debug APK
-        run: flutter build apk --debug
+        run: |
+          set -o pipefail
+          if ! flutter build apk --debug 2>&1 | tee /tmp/build.log; then
+            # Surface compile errors as annotations so they are readable on the
+            # pull request without opening the raw log.
+            if grep -qE ': Error:' /tmp/build.log; then
+              grep -E ': Error:' /tmp/build.log | head -40 | while IFS= read -r line; do
+                echo "::error::$line"
+              done
+            else
+              tail -30 /tmp/build.log | while IFS= read -r line; do echo "::error::$line"; done
+            fi
+            exit 1
+          fi
 
       # Release build for install testing. Flutter's generated Gradle config
       # signs release with the debug key when no keystore is configured, so
