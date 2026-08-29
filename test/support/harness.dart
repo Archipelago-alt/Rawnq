@@ -53,7 +53,7 @@ Future<ProviderContainer> pumpApp(
   final prefs = await SharedPreferences.getInstance();
 
   final container = ProviderContainer(
-    overrides: <Override>[
+    overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       catalogRepositoryProvider.overrideWithValue(repository ?? FakeCatalogRepository()),
       routerProvider.overrideWithValue(buildRouter(initialLocation: initialLocation)),
@@ -82,7 +82,7 @@ Future<ProviderContainer> pumpScreen(
   final prefs = await SharedPreferences.getInstance();
 
   final container = ProviderContainer(
-    overrides: <Override>[
+    overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       catalogRepositoryProvider.overrideWithValue(repository ?? FakeCatalogRepository()),
     ],

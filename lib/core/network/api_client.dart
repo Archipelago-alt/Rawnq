@@ -85,6 +85,7 @@ class ApiClient {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
+      case DioExceptionType.transformTimeout:
         return const Failure(FailureKind.timeout);
       case DioExceptionType.connectionError:
         return const Failure(FailureKind.offline);

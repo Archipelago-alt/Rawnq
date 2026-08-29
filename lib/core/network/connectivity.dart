@@ -21,5 +21,5 @@ bool _isOnline(List<ConnectivityResult> results) =>
 /// Null while unknown, so callers can distinguish "offline" from "not yet
 /// determined" and avoid flashing a banner on start-up.
 final isOfflineProvider = Provider<bool>(
-  (ref) => ref.watch(connectivityProvider).valueOrNull == false,
+  (ref) => ref.watch(connectivityProvider).asData?.value == false,
 );

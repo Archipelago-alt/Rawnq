@@ -42,7 +42,7 @@ Future<void> refreshCatalog(WidgetRef ref) async {
 
 /// Synchronous access to the loaded catalogue, or null while it loads.
 final loadedCatalogProvider = Provider<Catalog?>(
-  (ref) => ref.watch(catalogProvider).valueOrNull,
+  (ref) => ref.watch(catalogProvider).asData?.value,
 );
 
 /// Looks up one product by id from the loaded catalogue.

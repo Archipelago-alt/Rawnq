@@ -13,7 +13,7 @@ Future<ProviderContainer> makeContainer({
   SharedPreferences.setMockInitialValues(Map<String, Object>.of(preferences));
   final prefs = await SharedPreferences.getInstance();
   final container = ProviderContainer(
-    overrides: <Override>[sharedPreferencesProvider.overrideWithValue(prefs)],
+    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
   );
   addTearDown(container.dispose);
   return container;
