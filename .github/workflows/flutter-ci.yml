@@ -62,9 +62,7 @@ jobs:
         run: |
           set -o pipefail
           if ! flutter test --reporter expanded 2>&1 | tee /tmp/test.log; then
-            grep -E '^(\s*)(Error|Failed|.*: [0-9]+:[0-9]+: Error)' /tmp/test.log | head -50 \
-              | while IFS= read -r line; do echo "::error::$line"; done
-            tail -30 /tmp/test.log | while IFS= read -r line; do echo "::error::$line"; done
+            python3 tool/annotate_failures.py /tmp/test.log
             exit 1
           fi
 
