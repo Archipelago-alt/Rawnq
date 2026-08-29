@@ -37,8 +37,7 @@ void main() {
     // Sizes only appear once a colour narrows them.
     expect(find.text('اختاري المقاس'), findsNothing);
 
-    await tester.tap(find.text('خمري غامق').first);
-    await tester.pumpAndSettle();
+    await tapVisible(tester, find.text('خمري غامق').first);
 
     expect(find.text('اختاري المقاس'), findsOneWidget);
     expect(find.text('M'), findsOneWidget);
@@ -59,8 +58,7 @@ void main() {
     );
     await settle(tester);
 
-    await tester.tap(find.text('أضيفي إلى السلة'));
-    await tester.pump();
+    await tapVisible(tester, find.text('أضيفي إلى السلة'));
 
     expect(container.read(cartProvider), isEmpty);
     expect(find.text('الرجاء اختيار اللون أولاً'), findsOneWidget);
@@ -75,10 +73,8 @@ void main() {
     );
     await settle(tester);
 
-    await tester.tap(find.text('خمري غامق').first);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('أضيفي إلى السلة'));
-    await tester.pump();
+    await tapVisible(tester, find.text('خمري غامق').first);
+    await tapVisible(tester, find.text('أضيفي إلى السلة'));
 
     expect(container.read(cartProvider), isEmpty);
     expect(find.text('الرجاء اختيار المقاس أولاً'), findsOneWidget);
@@ -93,12 +89,9 @@ void main() {
     );
     await settle(tester);
 
-    await tester.tap(find.text('خمري غامق').first);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('L'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('أضيفي إلى السلة'));
-    await tester.pump();
+    await tapVisible(tester, find.text('خمري غامق').first);
+    await tapVisible(tester, find.text('L'));
+    await tapVisible(tester, find.text('أضيفي إلى السلة'));
 
     final items = container.read(cartProvider);
     expect(items, hasLength(1));
@@ -116,10 +109,8 @@ void main() {
 
     expect(find.text('اختاري المقاس'), findsNothing);
 
-    await tester.tap(find.text('اسود').first);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('أضيفي إلى السلة'));
-    await tester.pump();
+    await tapVisible(tester, find.text('اسود').first);
+    await tapVisible(tester, find.text('أضيفي إلى السلة'));
 
     expect(container.read(cartProvider), hasLength(1));
   });
@@ -133,8 +124,7 @@ void main() {
 
     expect(find.text('اختاري اللون'), findsNothing);
 
-    await tester.tap(find.text('أضيفي إلى السلة'));
-    await tester.pump();
+    await tapVisible(tester, find.text('أضيفي إلى السلة'));
 
     expect(container.read(cartProvider), hasLength(1));
   });
@@ -164,16 +154,14 @@ void main() {
 
     expect(container.read(favoritesProvider), isEmpty);
 
-    await tester.tap(find.byType(FavoriteButton).first);
-    await tester.pump();
+    await tapVisible(tester, find.byType(FavoriteButton).first);
 
     expect(
       container.read(favoritesProvider),
       contains(Fixtures.shirtNoVariants.id),
     );
 
-    await tester.tap(find.byType(FavoriteButton).first);
-    await tester.pump();
+    await tapVisible(tester, find.byType(FavoriteButton).first);
 
     expect(container.read(favoritesProvider), isEmpty);
   });

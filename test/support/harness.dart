@@ -139,6 +139,17 @@ Future<void> settle(WidgetTester tester) async {
   }
 }
 
+/// Scrolls [finder] into view, then taps it.
+///
+/// Product detail is a long scroll on a phone: the option selectors sit below
+/// the fold, and `tester.tap` fails hit-testing on an off-screen widget.
+Future<void> tapVisible(WidgetTester tester, Finder finder) async {
+  await tester.ensureVisible(finder);
+  await tester.pumpAndSettle();
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
 /// Convenience matcher for a widget's `GoRouter` location.
 String currentLocation(ProviderContainer container) {
   final router = container.read(routerProvider);
