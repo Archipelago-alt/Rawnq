@@ -42,6 +42,21 @@ class FakeCatalogRepository implements CatalogRepository {
   }
 }
 
+/// Gives the test a realistic portrait phone surface.
+///
+/// The default 800x600 test window is landscape, which puts a square product
+/// gallery taller than the viewport and leaves the content below it outside
+/// the lazy-mount cache extent. The app is portrait-only, so tests should
+/// measure it that way.
+void usePhoneSurface(
+  WidgetTester tester, {
+  Size size = const Size(1080, 2340),
+}) {
+  tester.view.physicalSize = size;
+  tester.view.devicePixelRatio = 3.0;
+  addTearDown(tester.view.reset);
+}
+
 /// Boots the app under test with fake persistence and a fake repository.
 ///
 /// Returns the container so a test can read providers directly.
@@ -51,6 +66,7 @@ Future<ProviderContainer> pumpApp(
   String initialLocation = Routes.home,
   Map<String, Object> preferences = const <String, Object>{},
 }) async {
+  usePhoneSurface(tester);
   SharedPreferences.setMockInitialValues(Map<String, Object>.of(preferences));
   final prefs = await SharedPreferences.getInstance();
 
@@ -81,6 +97,7 @@ Future<ProviderContainer> pumpScreen(
   CatalogRepository? repository,
   Map<String, Object> preferences = const <String, Object>{},
 }) async {
+  usePhoneSurface(tester);
   SharedPreferences.setMockInitialValues(Map<String, Object>.of(preferences));
   final prefs = await SharedPreferences.getInstance();
 
