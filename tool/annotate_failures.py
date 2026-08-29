@@ -35,26 +35,41 @@ def main() -> int:
         print(f"::error::could not read {path}: {error}")
         return 1
 
-    failures, seen = [], set()
+    # Which tests failed is more actionable than interleaved stack frames, so
+    # the names are collected first and given priority in the annotations.
+    names, details, seen_names, seen_details = [], [], set(), set()
     for raw in lines:
         line = clean(raw)
         if not line:
             continue
-        if line.startswith(INTERESTING) or LOCATION.search(line) \
-                or FAILED_TEST.search(line):
-            message = line[:MAX_LEN]
-            if message not in seen:
-                seen.add(message)
-                failures.append(message)
+        if FAILED_TEST.search(line):
+            # Trim the leading progress counter and the trailing marker.
+            name = re.sub(r"^\d\d:\d\d \+\d+( -\d+)?: ", "", line)
+            name = re.sub(r"\s*\[E\]$", "", name).strip()
+            name = name.replace("/home/runner/work/Rawnq/Rawnq/", "")
+            if name and name not in seen_names:
+                seen_names.add(name)
+                names.append(name)
+        elif line.startswith(INTERESTING):
+            if line not in seen_details:
+                seen_details.add(line)
+                details.append(line)
 
     summaries = [clean(line) for line in lines if SUMMARY.search(line)]
 
-    # Leave room for the summary line, which is the most useful single fact.
-    for message in failures[: MAX_ANNOTATIONS - 1]:
-        print(f"::error::{message}")
+    budget = MAX_ANNOTATIONS - (1 if summaries else 0)
+    emitted = 0
+    for name in names[:budget]:
+        print(f"::error::FAILED {name[:MAX_LEN]}")
+        emitted += 1
+    # Fill any spare slots with the first concrete expectations.
+    for detail in details[: max(0, budget - emitted)]:
+        print(f"::error::{detail[:MAX_LEN]}")
+        emitted += 1
     if summaries:
-        print(f"::error::{summaries[-1][:MAX_LEN]}")
-    if not failures and not summaries:
+        extra = f" ({len(names)} distinct failing tests)" if len(names) > budget else ""
+        print(f"::error::{summaries[-1][:MAX_LEN]}{extra}")
+    if not names and not details and not summaries:
         print("::error::Tests failed but no failure lines were recognised.")
     return 0
 
