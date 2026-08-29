@@ -15,6 +15,7 @@ doc/api/
 .env
 .env.*
 !.env.example
+!.env.example.json
 *.keystore
 *.jks
 key.properties
@@ -67,3 +68,6 @@ ios/Podfile.lock
 Thumbs.db
 *.log
 *.swp
+
+# Generated localisations (produced by `flutter gen-l10n`)
+lib/l10n/app_localizations*.dart

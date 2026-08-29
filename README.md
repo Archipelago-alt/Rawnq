@@ -1,5 +1,372 @@
-# RAWNQ (رونق)
+# RAWNQ · رونق
 
-Flutter shopping application for the RAWNQ women's clothing store in Gaza.
+A Flutter shopping app for **RAWNQ (رونق)**, a women's clothing store in Gaza,
+built to match the shop's live storefront at
+<https://bring-us.app/rawnqgaza>.
 
-Work in progress on branch `feature/flutter-shopping-app`.
+Arabic-first, fully right-to-left, Android-primary with iOS supported.
+
+---
+
+## Contents
+
+- [What this is](#what-this-is)
+- [Features](#features)
+- [Where the data comes from](#where-the-data-comes-from)
+- [Architecture](#architecture)
+- [Setup](#setup)
+- [Running](#running)
+- [Building](#building)
+- [Testing](#testing)
+- [Branding assets](#branding-assets)
+- [Application identifiers](#application-identifiers)
+- [Limitations and future work](#limitations-and-future-work)
+- [Contributing](#contributing)
+
+## What this is
+
+RAWNQ sells on **BringUs**, a multi-tenant WhatsApp-commerce platform. The
+shop is a tenant on that platform (slug `rawnqgaza`), not a bespoke website.
+This app reproduces that storefront as a native experience: the same
+catalogue, the same brand, the same Arabic copy, the same delivery and payment
+options — with mobile-native browsing, an offline-capable cart, and persistent
+favourites on top.
+
+Everything the app displays was read from the shop's own public storefront.
+**No product, price, category, size, colour, delivery term, payment method or
+policy text was invented.** Where the shop has not configured something, the
+app says so rather than filling the gap.
+
+Full findings: [docs/website-analysis.md](docs/website-analysis.md).
+
+## Features
+
+**Implemented and working**
+
+| Feature | Notes |
+| --- | --- |
+| Branded splash screen | Real logo on the brand cream ground |
+| Home | Hero, category strip, brand strip, new arrivals, a rail per category |
+| Categories | 4 real categories with Arabic descriptions and product counts |
+| Product listing | Per category, per brand, all products, new arrivals |
+| Product detail | Image gallery, colour swatches, size chips, description |
+| Colour & size selection | Enforced before adding to the cart |
+| Search | Arabic-normalised (finds `قُمْصَان` when you type `قمصان`) |
+| Filters & sorting | Brand, availability, new; price/name/newest ordering |
+| Favourites | Persisted between launches |
+| Cart | Quantity stepper, stock ceiling, remove-with-undo, clear, persisted |
+| Checkout | Validated form, real delivery area and payment methods, order summary |
+| Order confirmation | With a reference the shopper can quote |
+| WhatsApp ordering | Formatted Arabic message, correctly percent-encoded |
+| Web checkout | The shop's own checkout in a host-pinned WebView |
+| Contact | WhatsApp, phone, Instagram, website, store information |
+| Privacy & terms | Rendered from the shop's own fields |
+| States | Loading skeletons, offline, empty, error-with-retry, image fallbacks |
+
+**Deliberately not implemented** — see
+[Limitations](#limitations-and-future-work). These are documented as future
+work, not shipped as non-functional stubs.
+
+## Where the data comes from
+
+The app has two interchangeable data sources behind one repository interface:
+
+- **Live storefront API** — used when API configuration is supplied at build
+  time. Reads the real catalogue over the storefront's public, read-only REST
+  API.
+- **Bundled snapshot** — the default. A point-in-time copy of the real public
+  catalogue (`assets/data/catalog_snapshot.json`, captured 2026-08-29:
+  4 categories, 3 brands, 47 products, 94 variants).
+
+**When the snapshot is in use, every catalogue screen carries a banner saying
+so, with the capture date.** Local data is never passed off as live.
+
+Product photography always loads from the shop's CDN over the network, in both
+modes, and is cached on device.
+
+Full details, including the schema quirks the mapper handles and why the app
+does not submit orders: [docs/api-integration.md](docs/api-integration.md).
+
+## Architecture
+
+Feature-first, with presentation, domain and data kept apart.
+
+```
+lib/
+├── app/                 # Root widget, theme, router, shell, providers
+├── core/
+│   ├── config/          # Build-time configuration
+│   ├── network/         # Dio client, timeouts, error mapping
+│   ├── utils/           # Arabic normalisation, money, launcher, failures
+│   └── widgets/         # Skeletons, state views, images, catalogue scaffold
+├── features/
+│   ├── home/            # Hero, category/brand strips, product rails
+│   ├── categories/
+│   ├── products/        # Listing, detail, filters, gallery, option selectors
+│   ├── search/
+│   ├── favorites/
+│   ├── cart/
+│   ├── checkout/        # Order draft, WhatsApp message, success
+│   └── contact/         # Contact, policies, web checkout
+├── l10n/                # Arabic ARB
+└── shared/
+    ├── data/            # Repository interface + remote and local sources
+    └── models/          # Store, category, product, variant, cart, catalog
+```
+
+**Stack**
+
+| Concern | Choice |
+| --- | --- |
+| State | `flutter_riverpod` |
+| Navigation | `go_router` (shell route for the bottom bar) |
+| Networking | `dio` |
+| Images | `cached_network_image` |
+| Persistence | `shared_preferences` (favourites, cart) |
+| Platform links | `url_launcher`, `webview_flutter` |
+| Localisation | `flutter_localizations` + `intl`, ARB-driven |
+
+**Conventions**
+
+- No visible string is hardcoded in a widget; everything resolves through
+  `AppLocalizations`.
+- Business rules live in models and controllers, not in `build` methods —
+  e.g. option validation is in `CartController.add`, which is unit-tested
+  independently of any widget.
+- No code generation, so there is no `build_runner` step.
+
+### Arabic and RTL
+
+Arabic is the only language, because the live shop sets `primary_language: ar`
+and no secondary language. The whole string layer is still ARB-driven, so
+adding English is dropping in `app_en.arb` and widening `supportedLocales`.
+
+- The tree is wrapped in `Directionality(TextDirection.rtl)`.
+- Directional insets (`PositionedDirectional`, `EdgeInsetsDirectional`) are
+  used so badges and chevrons sit correctly.
+- Prices use Western digits with `₪`, matching the storefront.
+- Text scaling is clamped to 0.85–1.4 so large system fonts cannot break the
+  product grid; grid geometry additionally scales with the text scale factor.
+- **Tajawal** is bundled offline rather than Cairo: Google Fonts distributes
+  Cairo only as a variable font, whose weight axis Flutter's `fontWeight` does
+  not drive, while Tajawal ships static instances that map cleanly to weights
+  300–800. Both are named as acceptable in the brief. Licence:
+  `assets/fonts/TAJAWAL-OFL.txt`.
+
+## Setup
+
+**Requirements**
+
+- Flutter **3.47.2** stable or newer (Dart 3.13+)
+- Android: JDK 17, Android SDK (`compileSdk` 35), an emulator or device
+- iOS: macOS with Xcode 15+ and CocoaPods
+
+```bash
+flutter --version
+```
+
+```bash
+flutter pub get
+```
+
+Localisations are generated by `flutter pub get`; to regenerate explicitly:
+
+```bash
+flutter gen-l10n
+```
+
+### Optional: point the app at the live API
+
+Copy `.env.example.json` to `.env.json` and fill it in, then pass it at build
+time. `.env.json` is git-ignored. Without it the app uses the bundled
+snapshot. See [docs/api-integration.md](docs/api-integration.md) — including
+the note on whose API key that is.
+
+## Running
+
+```bash
+flutter run
+```
+
+Against the live API:
+
+```bash
+flutter run --dart-define-from-file=.env.json
+```
+
+## Building
+
+**Android APK** (release, unsigned — see [identifiers](#application-identifiers)):
+
+```bash
+flutter build apk --release
+```
+
+**Android App Bundle** for Play:
+
+```bash
+flutter build appbundle --release
+```
+
+**Split per ABI**, for a smaller download:
+
+```bash
+flutter build apk --release --split-per-abi
+```
+
+**Debug APK**:
+
+```bash
+flutter build apk --debug
+```
+
+**iOS** (macOS only):
+
+```bash
+flutter build ios --release
+```
+
+Then open `ios/Runner.xcworkspace` in Xcode, set a signing team, and archive.
+An unsigned build for CI:
+
+```bash
+flutter build ios --release --no-codesign
+```
+
+Release signing for Android needs a keystore and an `android/key.properties`.
+**Neither is in this repository, and no signing key is generated by it** —
+both paths are git-ignored.
+
+## Testing
+
+```bash
+flutter test
+```
+
+With coverage:
+
+```bash
+flutter test --coverage
+```
+
+The suite covers models and parsing, Arabic search normalisation, price
+formatting, filtering and sorting, cart calculations, product-option
+validation, both repositories, the WhatsApp order message and its encoding,
+and widget tests for the home screen, product detail, cart and a full
+navigation flow.
+
+Network access is faked at the `Dio` adapter and `AssetBundle` level, so
+**no test depends on the live website being reachable.**
+
+Analysis and formatting, as CI runs them:
+
+```bash
+flutter analyze
+```
+
+```bash
+dart format --output=none --set-exit-if-changed lib test
+```
+
+CI: [.github/workflows/flutter-ci.yml](.github/workflows/flutter-ci.yml) —
+analyze, format check and tests on every push, then a debug APK build.
+
+## Branding assets
+
+| Asset | Path | Status |
+| --- | --- | --- |
+| Logo | `assets/brand/rawnq_logo.jpg` | **Real**, downloaded unmodified from the shop's own CDN |
+| Launcher icon | generated from the logo | Real |
+| Splash | generated from the logo | Real |
+| Catalogue snapshot | `assets/data/catalog_snapshot.json` | Real content, point-in-time |
+| Tajawal font | `assets/fonts/` | SIL Open Font Licence |
+
+The logo was **not** redrawn, recoloured or modified. The palette is the
+shop's own: `brand_color` is `#7c3918` on the live tenant record, and the
+cream (`#F3EBE1`) and terracotta (`#B5623C`) are sampled from the logo
+artwork.
+
+To replace the logo, overwrite `assets/brand/rawnq_logo.jpg` (square, ≥1024 px)
+and regenerate:
+
+```bash
+dart run flutter_launcher_icons
+```
+
+```bash
+dart run flutter_native_splash:create
+```
+
+A higher-resolution or transparent-background source (PNG/SVG) would give a
+better adaptive icon than the current square JPEG; that is the one branding
+improvement worth making when the shop can supply the original artwork.
+
+## Application identifiers
+
+| Platform | Identifier |
+| --- | --- |
+| Android | `com.rawnq.gaza` |
+| iOS | `com.rawnq.gaza` |
+| App name | `RAWNQ` |
+| Arabic display name | `رونق` |
+
+> **These identifiers are placeholders.** They were chosen to match the brief
+> and could not be confirmed against any existing published RAWNQ app. Confirm
+> with the shop before publishing — an ID cannot be changed after a Play Store
+> release.
+
+To change the Android ID, update `namespace` and `applicationId` in
+`android/app/build.gradle.kts`, rename the `MainActivity.kt` package
+directories to match, and update the `package` attribute if present in
+`AndroidManifest.xml`. For iOS, set `PRODUCT_BUNDLE_IDENTIFIER` in
+`ios/Runner.xcodeproj/project.pbxproj` (or via Xcode).
+
+## Limitations and future work
+
+**Reproduced from the live site**: catalogue, brand identity, Arabic copy,
+delivery area, payment methods, category structure, product options, currency
+and price formatting, Arabic search behaviour, navigation structure.
+
+**Uses live data** when API configuration is supplied: everything above.
+**Uses bundled development data** otherwise — labelled in-app.
+
+**Not implemented, and why**
+
+| Feature | Reason |
+| --- | --- |
+| Order submission to the platform | Requires *writing* to the platform's production database with the platform's key. The app hands off to WhatsApp or the official web checkout instead. |
+| Payment processing | None of the shop's five payment methods is an integrated gateway. |
+| Customer accounts, order history, loyalty points | The shop has `allow_mobile_self_registration: false`; there are no customer accounts to sign into. |
+| Offers, promotions, coupons, advertisements | Zero rows on the live tenant. The UI supports discount badges, so a sale renders correctly the moment one exists. |
+| Subcategories | Zero rows on the live tenant. |
+| Push notifications | Needs backend access. |
+| English localisation | The live shop is Arabic-only (`secondary_language: null`). |
+
+**Known integration limitations**
+
+- The bundled snapshot is a point in time; prices and stock drift until the
+  live API is configured.
+- Stock is read at add-to-cart time, so a long-lived cart can hold a line that
+  has since sold out. The shop confirms availability when it receives the
+  order — as it does for web orders too.
+- Product images always require the network on first view.
+- Privacy policy and terms are empty upstream; those screens show an honest
+  empty state and link to the website, rather than inventing legal text.
+
+## Contributing
+
+Work happens on feature branches off the default branch:
+
+```bash
+git checkout -b feature/<short-description>
+```
+
+Before opening a pull request:
+
+```bash
+dart format lib test && flutter analyze && flutter test
+```
+
+Never commit: `.env` files with real values, keystores (`*.jks`, `*.keystore`),
+`key.properties`, `google-services.json`, provisioning profiles, or generated
+localisations. All are covered by `.gitignore`.
