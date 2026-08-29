@@ -6,8 +6,10 @@
 build/
 .flutter-plugins
 .flutter-plugins-dependencies
-pubspec.lock
 *.dart_tool
+
+# pubspec.lock IS committed: this is an application, not a library, and
+# pinning resolved versions keeps local and CI builds reproducible.
 coverage/
 doc/api/
 
