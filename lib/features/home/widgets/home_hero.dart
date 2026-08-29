@@ -8,7 +8,11 @@ import '../../../shared/models/store_info.dart';
 /// Branded banner at the top of the home screen: the real RAWNQ logo on the
 /// cream ground taken from the shop's own artwork, with the store's slogan.
 class HomeHero extends StatelessWidget {
-  const HomeHero({super.key, required this.store, required this.onContactPressed});
+  const HomeHero({
+    super.key,
+    required this.store,
+    required this.onContactPressed,
+  });
 
   final StoreInfo store;
   final VoidCallback onContactPressed;
@@ -40,7 +44,10 @@ class HomeHero extends StatelessWidget {
             child: IconButton(
               onPressed: onContactPressed,
               tooltip: l10n.navContact,
-              icon: const Icon(Icons.support_agent_rounded, color: RawnqColors.brown),
+              icon: const Icon(
+                Icons.support_agent_rounded,
+                color: RawnqColors.brown,
+              ),
             ),
           ),
           // The official logo asset, used unmodified.
@@ -58,17 +65,16 @@ class HomeHero extends StatelessWidget {
             store.label,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: RawnqColors.brown,
-                  fontWeight: FontWeight.w800,
-                ),
+              color: RawnqColors.brown,
+              fontWeight: FontWeight.w800,
+            ),
           ),
           const SizedBox(height: RawnqSpace.xs),
           Text(
             slogan,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: RawnqColors.inkSoft,
-                ),
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: RawnqColors.inkSoft),
           ),
         ],
       ),

@@ -20,9 +20,7 @@ Future<void> main() async {
 
   runApp(
     ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(preferences),
-      ],
+      overrides: [sharedPreferencesProvider.overrideWithValue(preferences)],
       child: const RawnqApp(),
     ),
   );

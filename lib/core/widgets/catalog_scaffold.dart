@@ -134,12 +134,7 @@ class SectionHeader extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleLarge,
-            ),
-          ),
+          Expanded(child: Text(title, style: theme.textTheme.titleLarge)),
           if (actionLabel != null && onAction != null)
             TextButton(
               onPressed: onAction,

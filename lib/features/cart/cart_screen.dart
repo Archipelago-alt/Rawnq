@@ -58,7 +58,8 @@ class CartScreen extends ConsumerWidget {
                   child: ListView.separated(
                     padding: const EdgeInsets.all(RawnqSpace.lg),
                     itemCount: items.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: RawnqSpace.md),
+                    separatorBuilder: (_, __) =>
+                        const SizedBox(height: RawnqSpace.md),
                     itemBuilder: (context, index) {
                       final item = items[index];
                       return CartLineTile(
@@ -145,12 +146,17 @@ class _CartSummary extends ConsumerWidget {
             children: <Widget>[
               _SummaryRow(label: l10n.cartItemCount(count), value: ''),
               const SizedBox(height: RawnqSpace.sm),
-              _SummaryRow(label: l10n.cartSubtotal, value: Money.format(subtotal)),
+              _SummaryRow(
+                label: l10n.cartSubtotal,
+                value: Money.format(subtotal),
+              ),
               if (delivery != null) ...<Widget>[
                 const SizedBox(height: RawnqSpace.sm),
                 _SummaryRow(
                   label: '${l10n.cartDelivery} — ${delivery!.name}',
-                  value: delivery!.isFree ? l10n.cartFreeDelivery : Money.format(fee),
+                  value: delivery!.isFree
+                      ? l10n.cartFreeDelivery
+                      : Money.format(fee),
                 ),
               ],
               const Padding(
@@ -197,7 +203,9 @@ class _SummaryRow extends StatelessWidget {
             label,
             style: emphasise
                 ? theme.textTheme.titleMedium
-                : theme.textTheme.bodyMedium?.copyWith(color: RawnqColors.inkSoft),
+                : theme.textTheme.bodyMedium?.copyWith(
+                    color: RawnqColors.inkSoft,
+                  ),
           ),
         ),
         Text(
@@ -208,7 +216,9 @@ class _SummaryRow extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                   color: RawnqColors.brown,
                 )
-              : theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              : theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
         ),
       ],
     );

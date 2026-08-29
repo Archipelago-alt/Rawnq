@@ -28,9 +28,15 @@ class CategoriesScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(RawnqSpace.lg),
             sliver: SliverList.separated(
               itemCount: 4,
-              separatorBuilder: (_, __) => const SizedBox(height: RawnqSpace.lg),
+              separatorBuilder: (_, __) =>
+                  const SizedBox(height: RawnqSpace.lg),
               itemBuilder: (_, __) => const Shimmer(
-                child: ShimmerBox(height: 116, borderRadius: BorderRadius.all(Radius.circular(RawnqSpace.radiusMd))),
+                child: ShimmerBox(
+                  height: 116,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(RawnqSpace.radiusMd),
+                  ),
+                ),
               ),
             ),
           ),
@@ -54,12 +60,15 @@ class CategoriesScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(RawnqSpace.lg),
               sliver: SliverList.separated(
                 itemCount: catalog.categories.length,
-                separatorBuilder: (_, __) => const SizedBox(height: RawnqSpace.lg),
+                separatorBuilder: (_, __) =>
+                    const SizedBox(height: RawnqSpace.lg),
                 itemBuilder: (context, index) {
                   final category = catalog.categories[index];
                   return _CategoryCard(
                     category: category,
-                    productCount: catalog.productsInCategory(category.id).length,
+                    productCount: catalog
+                        .productsInCategory(category.id)
+                        .length,
                   );
                 },
               ),
@@ -143,7 +152,10 @@ class _CategoryCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Icon(Icons.chevron_left_rounded, color: RawnqColors.inkSoft),
+                  const Icon(
+                    Icons.chevron_left_rounded,
+                    color: RawnqColors.inkSoft,
+                  ),
                 ],
               ),
             ),

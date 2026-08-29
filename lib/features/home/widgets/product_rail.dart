@@ -51,10 +51,8 @@ class ProductRailSkeleton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.lg),
           itemCount: 3,
           separatorBuilder: (_, __) => const SizedBox(width: RawnqSpace.md),
-          itemBuilder: (context, __) => const SizedBox(
-            width: 168,
-            child: ProductCardSkeleton(),
-          ),
+          itemBuilder: (context, __) =>
+              const SizedBox(width: 168, child: ProductCardSkeleton()),
         ),
       ),
     );

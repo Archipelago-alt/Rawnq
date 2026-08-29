@@ -24,7 +24,8 @@ class ProductCard extends ConsumerWidget {
 
     return Semantics(
       button: true,
-      label: '${product.name}، ${Money.format(product.displayPrice)}، '
+      label:
+          '${product.name}، ${Money.format(product.displayPrice)}، '
           '${available ? l10n.productAvailable : l10n.productUnavailable}',
       excludeSemantics: true,
       child: Material(
@@ -126,7 +127,10 @@ class _Thumbnail extends ConsumerWidget {
                 ],
                 if (!available) ...<Widget>[
                   const SizedBox(height: RawnqSpace.xs),
-                  ProductBadge(label: l10n.productUnavailable, color: RawnqColors.inkSoft),
+                  ProductBadge(
+                    label: l10n.productUnavailable,
+                    color: RawnqColors.inkSoft,
+                  ),
                 ],
               ],
             ),
@@ -134,7 +138,10 @@ class _Thumbnail extends ConsumerWidget {
           PositionedDirectional(
             top: RawnqSpace.xs,
             end: RawnqSpace.xs,
-            child: FavoriteButton(productId: product.id, isFavorite: isFavorite),
+            child: FavoriteButton(
+              productId: product.id,
+              isFavorite: isFavorite,
+            ),
           ),
         ],
       ),
@@ -164,14 +171,18 @@ class FavoriteButton extends ConsumerWidget {
       child: IconButton(
         iconSize: iconSize,
         visualDensity: VisualDensity.compact,
-        tooltip: isFavorite ? l10n.favoritesRemoveLabel : l10n.favoritesAddLabel,
+        tooltip: isFavorite
+            ? l10n.favoritesRemoveLabel
+            : l10n.favoritesAddLabel,
         onPressed: () {
           final added = ref.read(favoritesProvider.notifier).toggle(productId);
           ScaffoldMessenger.maybeOf(context)
             ?..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(added ? l10n.favoritesAdded : l10n.favoritesRemoved),
+                content: Text(
+                  added ? l10n.favoritesAdded : l10n.favoritesRemoved,
+                ),
                 duration: const Duration(milliseconds: 1400),
               ),
             );
@@ -193,7 +204,11 @@ class FavoriteButton extends ConsumerWidget {
 
 /// Small pill used for `جديد`, sale and availability markers.
 class ProductBadge extends StatelessWidget {
-  const ProductBadge({super.key, required this.label, this.color = RawnqColors.brown});
+  const ProductBadge({
+    super.key,
+    required this.label,
+    this.color = RawnqColors.brown,
+  });
 
   final String label;
   final Color color;
@@ -201,7 +216,10 @@ class ProductBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.sm, vertical: 3),
+      padding: const EdgeInsets.symmetric(
+        horizontal: RawnqSpace.sm,
+        vertical: 3,
+      ),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(RawnqSpace.radiusSm),
@@ -270,7 +288,9 @@ class ProductCardSkeleton extends StatelessWidget {
           AspectRatio(
             aspectRatio: 1,
             child: ShimmerBox(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(RawnqSpace.radiusMd)),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(RawnqSpace.radiusMd),
+              ),
             ),
           ),
           Padding(

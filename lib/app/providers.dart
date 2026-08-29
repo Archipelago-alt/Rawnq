@@ -10,12 +10,15 @@ import '../shared/models/catalog.dart';
 import '../shared/models/product.dart';
 
 /// Build-time configuration. Overridden in tests.
-final appConfigProvider = Provider<AppConfig>((ref) => AppConfig.fromEnvironment());
+final appConfigProvider = Provider<AppConfig>(
+  (ref) => AppConfig.fromEnvironment(),
+);
 
 /// Populated once at startup in `main()` so the rest of the app can read
 /// preferences synchronously.
 final sharedPreferencesProvider = Provider<SharedPreferences>(
-  (ref) => throw UnimplementedError('sharedPreferencesProvider must be overridden'),
+  (ref) =>
+      throw UnimplementedError('sharedPreferencesProvider must be overridden'),
 );
 
 /// Picks the live API when it is configured, and the bundled snapshot

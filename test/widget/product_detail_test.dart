@@ -21,8 +21,9 @@ void main() {
     expect(find.text('بجامة قطنية مريحة بتصميم عصري.'), findsOneWidget);
   });
 
-  testWidgets('offers the colour and size selectors from the variants',
-      (tester) async {
+  testWidgets('offers the colour and size selectors from the variants', (
+    tester,
+  ) async {
     await pumpScreen(
       tester,
       ProductDetailScreen(productId: Fixtures.pyjamaWithSizes.id),
@@ -42,11 +43,16 @@ void main() {
     expect(find.text('اختاري المقاس'), findsOneWidget);
     expect(find.text('M'), findsOneWidget);
     expect(find.text('L'), findsOneWidget);
-    expect(find.text('XL'), findsNothing, reason: 'XL belongs to the other colour');
+    expect(
+      find.text('XL'),
+      findsNothing,
+      reason: 'XL belongs to the other colour',
+    );
   });
 
-  testWidgets('refuses to add to the cart before an option is chosen',
-      (tester) async {
+  testWidgets('refuses to add to the cart before an option is chosen', (
+    tester,
+  ) async {
     final container = await pumpScreen(
       tester,
       ProductDetailScreen(productId: Fixtures.pyjamaWithSizes.id),
@@ -60,7 +66,9 @@ void main() {
     expect(find.text('الرجاء اختيار اللون أولاً'), findsOneWidget);
   });
 
-  testWidgets('refuses to add when a colour is chosen but no size', (tester) async {
+  testWidgets('refuses to add when a colour is chosen but no size', (
+    tester,
+  ) async {
     final container = await pumpScreen(
       tester,
       ProductDetailScreen(productId: Fixtures.pyjamaWithSizes.id),
@@ -76,7 +84,9 @@ void main() {
     expect(find.text('الرجاء اختيار المقاس أولاً'), findsOneWidget);
   });
 
-  testWidgets('adds to the cart once colour and size are chosen', (tester) async {
+  testWidgets('adds to the cart once colour and size are chosen', (
+    tester,
+  ) async {
     final container = await pumpScreen(
       tester,
       ProductDetailScreen(productId: Fixtures.pyjamaWithSizes.id),
@@ -157,7 +167,10 @@ void main() {
     await tester.tap(find.byType(FavoriteButton).first);
     await tester.pump();
 
-    expect(container.read(favoritesProvider), contains(Fixtures.shirtNoVariants.id));
+    expect(
+      container.read(favoritesProvider),
+      contains(Fixtures.shirtNoVariants.id),
+    );
 
     await tester.tap(find.byType(FavoriteButton).first);
     await tester.pump();
@@ -165,9 +178,13 @@ void main() {
     expect(container.read(favoritesProvider), isEmpty);
   });
 
-  testWidgets('an unknown product id shows an empty state, not a crash',
-      (tester) async {
-    await pumpScreen(tester, const ProductDetailScreen(productId: 'does-not-exist'));
+  testWidgets('an unknown product id shows an empty state, not a crash', (
+    tester,
+  ) async {
+    await pumpScreen(
+      tester,
+      const ProductDetailScreen(productId: 'does-not-exist'),
+    );
     await settle(tester);
 
     expect(find.text('لا توجد منتجات في هذا القسم'), findsOneWidget);

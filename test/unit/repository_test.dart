@@ -64,16 +64,18 @@ const _config = AppConfig(
 );
 
 Map<String, dynamic> _tenantRow() => <String, dynamic>{
-      'id': 'tenant-1',
-      'slug': 'rawnqgaza',
-      'store_label': 'رونق | RAWNQ',
-      'store_slogan_ar': 'لأنكِ تستحقين الأجمل',
-      'brand_color': '#7c3918',
-      'currency': 'ILS',
-      'store_whatsapp': '+970593208117',
-      'show_stock_to_mobile': false,
-      'social_links': <String, dynamic>{'instagram': 'https://instagram.com/rawnqgaza'},
-    };
+  'id': 'tenant-1',
+  'slug': 'rawnqgaza',
+  'store_label': 'رونق | RAWNQ',
+  'store_slogan_ar': 'لأنكِ تستحقين الأجمل',
+  'brand_color': '#7c3918',
+  'currency': 'ILS',
+  'store_whatsapp': '+970593208117',
+  'show_stock_to_mobile': false,
+  'social_links': <String, dynamic>{
+    'instagram': 'https://instagram.com/rawnqgaza',
+  },
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -155,15 +157,23 @@ void main() {
             <String, dynamic>{'id': 'd1', 'name': 'غزة', 'price': 0},
           ],
           'paymentMethods': <dynamic>[
-            <String, dynamic>{'id': 'm1', 'name': 'الدفع عند الاستلام', 'type': 'cod'},
+            <String, dynamic>{
+              'id': 'm1',
+              'name': 'الدفع عند الاستلام',
+              'type': 'cod',
+            },
           ],
         }),
       });
 
-      final catalog =
-          await LocalCatalogRepository(bundle: bundle).loadCatalog();
+      final catalog = await LocalCatalogRepository(bundle: bundle)
+          .loadCatalog();
 
-      expect(catalog.isLiveData, isFalse, reason: 'snapshot data is never live');
+      expect(
+        catalog.isLiveData,
+        isFalse,
+        reason: 'snapshot data is never live',
+      );
       expect(catalog.capturedAt, DateTime.utc(2026, 8, 29, 12));
       expect(catalog.store.label, 'رونق | RAWNQ');
       expect(catalog.store.whatsappDigits, '970593208117');
@@ -178,7 +188,12 @@ void main() {
       final bundle = _CountingBundle(() {
         loads++;
         return jsonEncode(<String, dynamic>{
-          'store': <String, dynamic>{'id': 't', 'slug': 's', 'label': 'x', 'currency': 'ILS'},
+          'store': <String, dynamic>{
+            'id': 't',
+            'slug': 's',
+            'label': 'x',
+            'currency': 'ILS',
+          },
           'categories': <dynamic>[],
           'brands': <dynamic>[],
           'products': <dynamic>[],
@@ -263,8 +278,11 @@ void main() {
       ).loadCatalog();
 
       expect(catalog.isLiveData, isTrue);
-      expect(catalog.products.single.price, 100,
-          reason: 'price_1 must be normalised into price');
+      expect(
+        catalog.products.single.price,
+        100,
+        reason: 'price_1 must be normalised into price',
+      );
       expect(catalog.products.single.isNew, isTrue);
       expect(catalog.products.single.images, <String>['https://cdn/a.webp']);
       expect(catalog.products.single.variants.single.color, 'اسود');
@@ -275,7 +293,10 @@ void main() {
           .where((path) => !path.contains('/tenants'))
           .toList();
       expect(scoped, isNotEmpty);
-      expect(scoped.every((path) => path.contains('tenant_id=eq.tenant-1')), isTrue);
+      expect(
+        scoped.every((path) => path.contains('tenant_id=eq.tenant-1')),
+        isTrue,
+      );
     });
 
     test('a connection error surfaces as an offline failure', () async {
@@ -288,8 +309,9 @@ void main() {
       final dio = Dio()..httpClientAdapter = adapter;
 
       await expectLater(
-        RemoteCatalogRepository(client: ApiClient(config: _config, dio: dio))
-            .loadCatalog(),
+        RemoteCatalogRepository(
+          client: ApiClient(config: _config, dio: dio),
+        ).loadCatalog(),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.offline),
         ),
@@ -306,8 +328,9 @@ void main() {
       final dio = Dio()..httpClientAdapter = adapter;
 
       await expectLater(
-        RemoteCatalogRepository(client: ApiClient(config: _config, dio: dio))
-            .loadCatalog(),
+        RemoteCatalogRepository(
+          client: ApiClient(config: _config, dio: dio),
+        ).loadCatalog(),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.timeout),
         ),
@@ -319,8 +342,9 @@ void main() {
       final dio = Dio()..httpClientAdapter = adapter;
 
       await expectLater(
-        RemoteCatalogRepository(client: ApiClient(config: _config, dio: dio))
-            .loadCatalog(),
+        RemoteCatalogRepository(
+          client: ApiClient(config: _config, dio: dio),
+        ).loadCatalog(),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.server),
         ),
@@ -332,16 +356,16 @@ void main() {
       final dio = Dio()..httpClientAdapter = adapter;
 
       await expectLater(
-        RemoteCatalogRepository(client: ApiClient(config: _config, dio: dio))
-            .loadCatalog(),
+        RemoteCatalogRepository(
+          client: ApiClient(config: _config, dio: dio),
+        ).loadCatalog(),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.notFound),
         ),
       );
     });
 
-    test('a failure after the tenant loads propagates without unhandled errors',
-        () async {
+    test('a failure after the tenant loads propagates without unhandled errors', () async {
       // Every catalogue request fails at once. Future.wait surfaces the first;
       // the rest must not escape as unhandled async errors.
       final adapter = _FakeAdapter((options) {
@@ -354,8 +378,9 @@ void main() {
       final dio = Dio()..httpClientAdapter = adapter;
 
       await expectLater(
-        RemoteCatalogRepository(client: ApiClient(config: _config, dio: dio))
-            .loadCatalog(),
+        RemoteCatalogRepository(
+          client: ApiClient(config: _config, dio: dio),
+        ).loadCatalog(),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.offline),
         ),
@@ -365,29 +390,31 @@ void main() {
       await Future<void>.delayed(Duration.zero);
     });
 
-    test('results are cached until the TTL expires, and forceRefresh bypasses it',
-        () async {
-      var tenantCalls = 0;
-      final adapter = _FakeAdapter((options) {
-        if (options.path.endsWith('/tenants')) {
-          tenantCalls++;
-          return <dynamic>[_tenantRow()];
-        }
-        return <dynamic>[];
-      });
-      final dio = Dio()..httpClientAdapter = adapter;
-      final repository = RemoteCatalogRepository(
-        client: ApiClient(config: _config, dio: dio),
-        cacheTtl: const Duration(minutes: 10),
-      );
+    test(
+      'results are cached until the TTL expires, and forceRefresh bypasses it',
+      () async {
+        var tenantCalls = 0;
+        final adapter = _FakeAdapter((options) {
+          if (options.path.endsWith('/tenants')) {
+            tenantCalls++;
+            return <dynamic>[_tenantRow()];
+          }
+          return <dynamic>[];
+        });
+        final dio = Dio()..httpClientAdapter = adapter;
+        final repository = RemoteCatalogRepository(
+          client: ApiClient(config: _config, dio: dio),
+          cacheTtl: const Duration(minutes: 10),
+        );
 
-      await repository.loadCatalog();
-      await repository.loadCatalog();
-      expect(tenantCalls, 1);
+        await repository.loadCatalog();
+        await repository.loadCatalog();
+        expect(tenantCalls, 1);
 
-      await repository.loadCatalog(forceRefresh: true);
-      expect(tenantCalls, 2);
-    });
+        await repository.loadCatalog(forceRefresh: true);
+        expect(tenantCalls, 2);
+      },
+    );
   });
 }
 

@@ -68,7 +68,8 @@ class OrderDraft {
   final StorePaymentMethod paymentMethod;
   final String? notes;
 
-  double get subtotal => items.fold<double>(0, (sum, item) => sum + item.lineTotal);
+  double get subtotal =>
+      items.fold<double>(0, (sum, item) => sum + item.lineTotal);
 
   double get deliveryFee => deliveryLocation.price;
 

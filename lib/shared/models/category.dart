@@ -10,12 +10,14 @@ class ProductCategory {
     this.sortOrder = 0,
   });
 
-  factory ProductCategory.fromJson(Map<String, dynamic> json) => ProductCategory(
+  factory ProductCategory.fromJson(Map<String, dynamic> json) =>
+      ProductCategory(
         id: json['id'] as String? ?? '',
         name: (json['name_ar'] ?? json['name'] ?? '') as String,
         description: _text(json['description']),
         imageUrl: _text(json['imageUrl'] ?? json['image']),
-        sortOrder: (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
+        sortOrder:
+            (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
       );
 
   final String id;
@@ -41,11 +43,11 @@ class Brand {
   });
 
   factory Brand.fromJson(Map<String, dynamic> json) => Brand(
-        id: json['id'] as String? ?? '',
-        name: (json['name_ar'] ?? json['name'] ?? '') as String,
-        logoUrl: ProductCategory._text(json['logoUrl'] ?? json['logo_url']),
-        sortOrder: (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
-      );
+    id: json['id'] as String? ?? '',
+    name: (json['name_ar'] ?? json['name'] ?? '') as String,
+    logoUrl: ProductCategory._text(json['logoUrl'] ?? json['logo_url']),
+    sortOrder: (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
+  );
 
   final String id;
   final String name;

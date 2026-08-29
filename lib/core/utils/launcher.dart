@@ -15,7 +15,9 @@ class ExternalLauncher {
     try {
       return await launchUrl(
         uri,
-        mode: external ? LaunchMode.externalApplication : LaunchMode.platformDefault,
+        mode: external
+            ? LaunchMode.externalApplication
+            : LaunchMode.platformDefault,
       );
     } on Exception {
       return false;

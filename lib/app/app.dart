@@ -35,10 +35,8 @@ class RawnqApp extends ConsumerWidget {
       builder: (context, child) {
         // Cap text scaling so very large system font settings cannot break
         // the product grid, while still honouring the user's preference.
-        final scaler = MediaQuery.textScalerOf(context).clamp(
-          minScaleFactor: 0.85,
-          maxScaleFactor: 1.4,
-        );
+        final scaler = MediaQuery.textScalerOf(context)
+            .clamp(minScaleFactor: 0.85, maxScaleFactor: 1.4);
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaler: scaler),
           child: Directionality(

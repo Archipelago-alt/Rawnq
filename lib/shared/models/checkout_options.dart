@@ -11,7 +11,8 @@ class DeliveryLocation {
     this.type = 'local',
   });
 
-  factory DeliveryLocation.fromJson(Map<String, dynamic> json) => DeliveryLocation(
+  factory DeliveryLocation.fromJson(Map<String, dynamic> json) =>
+      DeliveryLocation(
         id: json['id'] as String? ?? '',
         name: _pick(json['name_ar'], json['name']) ?? '',
         price: _toDouble(json['price'] ?? json['delivery_price']),
@@ -38,9 +39,15 @@ class StorePaymentMethod {
     this.iconUrl,
   });
 
-  factory StorePaymentMethod.fromJson(Map<String, dynamic> json) => StorePaymentMethod(
+  factory StorePaymentMethod.fromJson(Map<String, dynamic> json) =>
+      StorePaymentMethod(
         id: json['id'] as String? ?? '',
-        name: _pick(json['method_name_ar'], json['name'] ?? json['method_name']) ?? '',
+        name:
+            _pick(
+              json['method_name_ar'],
+              json['name'] ?? json['method_name'],
+            ) ??
+            '',
         type: (json['type'] ?? json['method_type'] ?? 'other') as String,
         iconUrl: _pick(json['iconUrl'], json['icon_url']),
       );

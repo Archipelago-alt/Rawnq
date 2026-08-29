@@ -5,24 +5,27 @@ import '../support/fixtures.dart';
 
 void main() {
   group('Product.fromJson', () {
-    test('reads images from the flat image_url_N columns the API actually uses', () {
-      final product = Product.fromJson(<String, dynamic>{
-        'id': 'p1',
-        'name': 'قميص',
-        'price': 80,
-        'images': null,
-        'image_url_1': 'https://cdn/1.webp',
-        'image_url_2': 'https://cdn/2.webp',
-        'image_url_5': 'https://cdn/5.webp',
-      });
+    test(
+      'reads images from the flat image_url_N columns the API actually uses',
+      () {
+        final product = Product.fromJson(<String, dynamic>{
+          'id': 'p1',
+          'name': 'قميص',
+          'price': 80,
+          'images': null,
+          'image_url_1': 'https://cdn/1.webp',
+          'image_url_2': 'https://cdn/2.webp',
+          'image_url_5': 'https://cdn/5.webp',
+        });
 
-      expect(product.images, <String>[
-        'https://cdn/1.webp',
-        'https://cdn/2.webp',
-        'https://cdn/5.webp',
-      ]);
-      expect(product.primaryImage, 'https://cdn/1.webp');
-    });
+        expect(product.images, <String>[
+          'https://cdn/1.webp',
+          'https://cdn/2.webp',
+          'https://cdn/5.webp',
+        ]);
+        expect(product.primaryImage, 'https://cdn/1.webp');
+      },
+    );
 
     test('prefers the images array when the API supplies one', () {
       final product = Product.fromJson(<String, dynamic>{
@@ -100,7 +103,13 @@ void main() {
         price: 10,
         stock: 99, // product-level stock must not mask empty variants
         variants: const <ProductVariant>[
-          ProductVariant(id: 'v', productId: 'p', name: 'v', price: 10, stock: 0),
+          ProductVariant(
+            id: 'v',
+            productId: 'p',
+            name: 'v',
+            price: 10,
+            stock: 0,
+          ),
         ],
       );
 
@@ -123,7 +132,10 @@ void main() {
     });
 
     test('sizes are scoped to the chosen colour', () {
-      expect(Fixtures.pyjamaWithSizes.sizesFor('خمري غامق'), <String>['M', 'L']);
+      expect(Fixtures.pyjamaWithSizes.sizesFor('خمري غامق'), <String>[
+        'M',
+        'L',
+      ]);
       expect(Fixtures.pyjamaWithSizes.sizesFor('Sand beige'), <String>['XL']);
     });
 
@@ -133,15 +145,19 @@ void main() {
     });
 
     test('findVariant resolves a colour and size pair', () {
-      final variant =
-          Fixtures.pyjamaWithSizes.findVariant(color: 'خمري غامق', size: 'L');
+      final variant = Fixtures.pyjamaWithSizes.findVariant(
+        color: 'خمري غامق',
+        size: 'L',
+      );
 
       expect(variant?.id, 'v-l');
     });
 
     test('findVariant returns null for a combination that does not exist', () {
-      final variant =
-          Fixtures.pyjamaWithSizes.findVariant(color: 'Sand beige', size: 'M');
+      final variant = Fixtures.pyjamaWithSizes.findVariant(
+        color: 'Sand beige',
+        size: 'M',
+      );
 
       expect(variant, isNull);
     });
@@ -154,8 +170,20 @@ void main() {
         name: 'x',
         price: 200,
         variants: const <ProductVariant>[
-          ProductVariant(id: 'a', productId: 'p', name: 'a', price: 120, stock: 1),
-          ProductVariant(id: 'b', productId: 'p', name: 'b', price: 90, stock: 1),
+          ProductVariant(
+            id: 'a',
+            productId: 'p',
+            name: 'a',
+            price: 120,
+            stock: 1,
+          ),
+          ProductVariant(
+            id: 'b',
+            productId: 'p',
+            name: 'b',
+            price: 90,
+            stock: 1,
+          ),
         ],
       );
 
@@ -194,16 +222,19 @@ void main() {
       expect(product.discountBadge, 25);
     });
 
-    test('a percentage is ignored while the shop keeps show_discount false', () {
-      const product = Product(
-        id: 'p',
-        name: 'x',
-        price: 75,
-        discountPercentage: 25,
-      );
+    test(
+      'a percentage is ignored while the shop keeps show_discount false',
+      () {
+        const product = Product(
+          id: 'p',
+          name: 'x',
+          price: 75,
+          discountPercentage: 25,
+        );
 
-      expect(product.isOnSale, isFalse);
-    });
+        expect(product.isOnSale, isFalse);
+      },
+    );
   });
 
   group('gallery', () {

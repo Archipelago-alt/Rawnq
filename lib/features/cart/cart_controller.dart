@@ -13,9 +13,7 @@ enum CartAddError { optionRequired, sizeRequired, outOfStock, maxQuantity }
 
 /// Outcome of an add-to-cart attempt.
 class CartAddResult {
-  const CartAddResult.success()
-      : error = null,
-        availableQuantity = null;
+  const CartAddResult.success() : error = null, availableQuantity = null;
   const CartAddResult.failure(this.error, {this.availableQuantity});
 
   final CartAddError? error;
@@ -56,18 +54,27 @@ class CartController extends Notifier<List<CartItem>> {
       }
     }
 
-    final available = variant != null ? variant.stock.floor() : product.stock.floor();
+    final available = variant != null
+        ? variant.stock.floor()
+        : product.stock.floor();
     if (available <= 0) {
       return const CartAddResult.failure(CartAddError.outOfStock);
     }
 
-    final line = CartItem.fromProduct(product, variant: variant, quantity: quantity);
+    final line = CartItem.fromProduct(
+      product,
+      variant: variant,
+      quantity: quantity,
+    );
     final existing = _indexOf(line.key);
     final currentQuantity = existing == -1 ? 0 : state[existing].quantity;
     final desired = currentQuantity + quantity;
 
     if (desired > available) {
-      return CartAddResult.failure(CartAddError.maxQuantity, availableQuantity: available);
+      return CartAddResult.failure(
+        CartAddError.maxQuantity,
+        availableQuantity: available,
+      );
     }
 
     final next = List<CartItem>.of(state);
@@ -92,7 +99,10 @@ class CartController extends Notifier<List<CartItem>> {
     final item = state[index];
     final max = item.maxQuantity;
     if (max != null && quantity > max) {
-      return CartAddResult.failure(CartAddError.maxQuantity, availableQuantity: max);
+      return CartAddResult.failure(
+        CartAddError.maxQuantity,
+        availableQuantity: max,
+      );
     }
 
     final next = List<CartItem>.of(state);
@@ -157,7 +167,9 @@ class CartController extends Notifier<List<CartItem>> {
   }
 }
 
-final cartProvider = NotifierProvider<CartController, List<CartItem>>(CartController.new);
+final cartProvider = NotifierProvider<CartController, List<CartItem>>(
+  CartController.new,
+);
 
 /// Sum of the line totals, before delivery.
 final cartSubtotalProvider = Provider<double>((ref) {

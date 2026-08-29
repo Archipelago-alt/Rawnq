@@ -42,7 +42,9 @@ class OrderSuccessScreen extends ConsumerWidget {
                 Text(
                   l10n.orderSuccessBody,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium?.copyWith(color: RawnqColors.inkSoft),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: RawnqColors.inkSoft,
+                  ),
                 ),
                 if (reference.isNotEmpty) ...<Widget>[
                   const SizedBox(height: RawnqSpace.xl),
@@ -69,9 +71,8 @@ class OrderSuccessScreen extends ConsumerWidget {
                 if (whatsapp != null) ...<Widget>[
                   const SizedBox(height: RawnqSpace.md),
                   OutlinedButton.icon(
-                    onPressed: () => ExternalLauncher.open(
-                      Uri.https('wa.me', '/$whatsapp'),
-                    ),
+                    onPressed: () =>
+                        ExternalLauncher.open(Uri.https('wa.me', '/$whatsapp')),
                     icon: const Icon(Icons.chat_rounded, size: 20),
                     label: Text(l10n.orderSuccessContactUs),
                   ),
@@ -93,7 +94,8 @@ class _SuccessMark extends StatefulWidget {
   State<_SuccessMark> createState() => _SuccessMarkState();
 }
 
-class _SuccessMarkState extends State<_SuccessMark> with SingleTickerProviderStateMixin {
+class _SuccessMarkState extends State<_SuccessMark>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 620),
@@ -116,7 +118,11 @@ class _SuccessMarkState extends State<_SuccessMark> with SingleTickerProviderSta
           color: RawnqColors.cream,
           shape: BoxShape.circle,
         ),
-        child: const Icon(Icons.check_rounded, size: 52, color: RawnqColors.brown),
+        child: const Icon(
+          Icons.check_rounded,
+          size: 52,
+          color: RawnqColors.brown,
+        ),
       ),
     );
   }

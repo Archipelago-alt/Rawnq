@@ -63,7 +63,10 @@ void main() {
     });
 
     test('punctuation in the query does not break matching', () {
-      expect(ArabicText.matches('طقم لانجري صيفي فاخر', 'لانجري، صيفي'), isTrue);
+      expect(
+        ArabicText.matches('طقم لانجري صيفي فاخر', 'لانجري، صيفي'),
+        isTrue,
+      );
     });
   });
 }

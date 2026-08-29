@@ -21,7 +21,9 @@ class FavoritesScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.favoritesTitle)),
       body: CatalogView(
-        skeleton: (context) => const <Widget>[ProductSliverGridSkeleton(itemCount: 4)],
+        skeleton: (context) => const <Widget>[
+          ProductSliverGridSkeleton(itemCount: 4),
+        ],
         builder: (context, catalog) {
           // Favourites survive catalogue changes, so ids that no longer exist
           // are simply skipped rather than rendered as broken tiles.
@@ -49,7 +51,8 @@ class FavoritesScreen extends ConsumerWidget {
           return <Widget>[
             ProductSliverGrid(
               products: products,
-              onProductTap: (product) => context.push(Routes.productPath(product.id)),
+              onProductTap: (product) =>
+                  context.push(Routes.productPath(product.id)),
             ),
           ];
         },

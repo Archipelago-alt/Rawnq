@@ -27,7 +27,8 @@ class ProductDetailScreen extends ConsumerStatefulWidget {
   final String productId;
 
   @override
-  ConsumerState<ProductDetailScreen> createState() => _ProductDetailScreenState();
+  ConsumerState<ProductDetailScreen> createState() =>
+      _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
@@ -109,7 +110,9 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
       return;
     }
 
-    final result = ref.read(cartProvider.notifier).add(product, variant: variant);
+    final result = ref
+        .read(cartProvider.notifier)
+        .add(product, variant: variant);
     if (result.isSuccess) {
       _toast(
         l10n.productAddedToCart,
@@ -123,15 +126,14 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
     }
 
     setState(() => _showSelectionError = true);
-    _toast(
-      switch (result.error!) {
-        CartAddError.optionRequired => l10n.productSelectColorFirst,
-        CartAddError.sizeRequired => l10n.productSelectSizeFirst,
-        CartAddError.outOfStock => l10n.productOutOfStockOption,
-        CartAddError.maxQuantity =>
-          l10n.cartMaxQuantityReached(result.availableQuantity ?? 0),
-      },
-    );
+    _toast(switch (result.error!) {
+      CartAddError.optionRequired => l10n.productSelectColorFirst,
+      CartAddError.sizeRequired => l10n.productSelectSizeFirst,
+      CartAddError.outOfStock => l10n.productOutOfStockOption,
+      CartAddError.maxQuantity => l10n.cartMaxQuantityReached(
+        result.availableQuantity ?? 0,
+      ),
+    });
   }
 
   /// Maps the current selection onto a concrete variant, if it is complete.
@@ -182,7 +184,7 @@ class _DetailBody extends ConsumerWidget {
     final selectedVariant = color == null
         ? null
         : product.findVariant(color: color, size: size) ??
-            product.findVariant(color: color);
+              product.findVariant(color: color);
     final gallery = product.galleryFor(selectedVariant);
     final price = selectedVariant?.price != null && selectedVariant!.price > 0
         ? selectedVariant.price
@@ -191,7 +193,8 @@ class _DetailBody extends ConsumerWidget {
     final sizes = product.hasColors && color == null
         ? const <String>[]
         : product.sizesFor(color);
-    final material = selectedVariant?.material ??
+    final material =
+        selectedVariant?.material ??
         (product.variants.isEmpty ? null : product.variants.first.material);
 
     return Column(
@@ -221,11 +224,16 @@ class _DetailBody extends ConsumerWidget {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        if (product.isNew) ProductBadge(label: l10n.productBadgeNew),
+                        if (product.isNew)
+                          ProductBadge(label: l10n.productBadgeNew),
                         if (product.isNew) const SizedBox(width: RawnqSpace.sm),
                         ProductBadge(
-                          label: available ? l10n.productAvailable : l10n.productUnavailable,
-                          color: available ? RawnqColors.success : RawnqColors.inkSoft,
+                          label: available
+                              ? l10n.productAvailable
+                              : l10n.productUnavailable,
+                          color: available
+                              ? RawnqColors.success
+                              : RawnqColors.inkSoft,
                         ),
                       ],
                     ),
@@ -239,7 +247,10 @@ class _DetailBody extends ConsumerWidget {
                       ),
                     ],
                     const SizedBox(height: RawnqSpace.md),
-                    _PriceBlock(price: price, original: product.effectiveOriginalPrice),
+                    _PriceBlock(
+                      price: price,
+                      original: product.effectiveOriginalPrice,
+                    ),
 
                     if (product.hasColors) ...<Widget>[
                       const SizedBox(height: RawnqSpace.xl),
@@ -252,8 +263,9 @@ class _DetailBody extends ConsumerWidget {
                         options: product.colorOptions,
                         selected: color,
                         onSelected: onColorSelected,
-                        isAvailable: (value) => product.variants
-                            .any((v) => v.color == value && v.inStock),
+                        isAvailable: (value) => product.variants.any(
+                          (v) => v.color == value && v.inStock,
+                        ),
                       ),
                     ],
 
@@ -261,7 +273,8 @@ class _DetailBody extends ConsumerWidget {
                       const SizedBox(height: RawnqSpace.xl),
                       _OptionLabel(
                         text: l10n.productChooseSize,
-                        highlight: showSelectionError && color != null && size == null,
+                        highlight:
+                            showSelectionError && color != null && size == null,
                       ),
                       const SizedBox(height: RawnqSpace.md),
                       SizeSelector(
@@ -269,15 +282,21 @@ class _DetailBody extends ConsumerWidget {
                         selected: size,
                         onSelected: onSizeSelected,
                         isAvailable: (value) =>
-                            product.findVariant(color: color, size: value)?.inStock ?? false,
+                            product
+                                .findVariant(color: color, size: value)
+                                ?.inStock ??
+                            false,
                       ),
                     ],
 
-                    if (selectedVariant != null && !selectedVariant.inStock) ...<Widget>[
+                    if (selectedVariant != null &&
+                        !selectedVariant.inStock) ...<Widget>[
                       const SizedBox(height: RawnqSpace.md),
                       Text(
                         l10n.productOutOfStockOption,
-                        style: theme.textTheme.bodySmall?.copyWith(color: RawnqColors.sale),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: RawnqColors.sale,
+                        ),
                       ),
                     ],
 
@@ -288,9 +307,15 @@ class _DetailBody extends ConsumerWidget {
 
                     if (product.description != null) ...<Widget>[
                       const SizedBox(height: RawnqSpace.xl),
-                      Text(l10n.productDescription, style: theme.textTheme.titleMedium),
+                      Text(
+                        l10n.productDescription,
+                        style: theme.textTheme.titleMedium,
+                      ),
                       const SizedBox(height: RawnqSpace.sm),
-                      Text(product.description!, style: theme.textTheme.bodyMedium),
+                      Text(
+                        product.description!,
+                        style: theme.textTheme.bodyMedium,
+                      ),
                     ],
                     const SizedBox(height: RawnqSpace.xxl),
                   ],
@@ -299,11 +324,7 @@ class _DetailBody extends ConsumerWidget {
             ],
           ),
         ),
-        _AddToCartBar(
-          price: price,
-          enabled: available,
-          onPressed: onAddToCart,
-        ),
+        _AddToCartBar(price: price, enabled: available, onPressed: onAddToCart),
       ],
     );
   }
@@ -359,13 +380,16 @@ class _OptionLabel extends StatelessWidget {
       children: <Widget>[
         Text(
           text,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: highlight ? RawnqColors.sale : RawnqColors.ink,
-              ),
+          style: Theme.of(context).textTheme.titleMedium
+              ?.copyWith(color: highlight ? RawnqColors.sale : RawnqColors.ink),
         ),
         if (highlight) ...<Widget>[
           const SizedBox(width: RawnqSpace.sm),
-          const Icon(Icons.error_outline_rounded, size: 18, color: RawnqColors.sale),
+          const Icon(
+            Icons.error_outline_rounded,
+            size: 18,
+            color: RawnqColors.sale,
+          ),
         ],
       ],
     );
@@ -385,9 +409,7 @@ class _InfoRow extends StatelessWidget {
         Text('$label: ', style: Theme.of(context).textTheme.bodySmall),
         Text(
           value,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
+          style: Theme.of(context).textTheme.bodyMedium
               ?.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
@@ -424,7 +446,10 @@ class _AddToCartBar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Text(l10n.cartTotal, style: Theme.of(context).textTheme.bodySmall),
+                    Text(
+                      l10n.cartTotal,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                     Text(
                       Money.format(price),
                       style: const TextStyle(
@@ -465,7 +490,10 @@ class _DetailSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          AspectRatio(aspectRatio: 1, child: ShimmerBox(borderRadius: BorderRadius.zero)),
+          AspectRatio(
+            aspectRatio: 1,
+            child: ShimmerBox(borderRadius: BorderRadius.zero),
+          ),
           Padding(
             padding: EdgeInsets.all(RawnqSpace.lg),
             child: Column(

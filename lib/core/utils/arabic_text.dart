@@ -7,13 +7,9 @@ class ArabicText {
   const ArabicText._();
 
   /// Combining marks: tashkeel (harakat), tatweel and the superscript alef.
-  static final RegExp _diacritics = RegExp(
-    r'[ؐ-ًؚ-ٰٟۖ-ۭـ]',
-  );
+  static final RegExp _diacritics = RegExp(r'[ؐ-ًؚ-ٰٟۖ-ۭـ]');
 
-  static final RegExp _nonSearchable = RegExp(
-    r'[^ء-يa-z0-9\s]',
-  );
+  static final RegExp _nonSearchable = RegExp(r'[^ء-يa-z0-9\s]');
 
   static final RegExp _whitespace = RegExp(r'\s+');
 

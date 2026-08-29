@@ -27,13 +27,16 @@ class ProductGallery extends StatefulWidget {
 }
 
 class _ProductGalleryState extends State<ProductGallery> {
-  late final PageController _controller = PageController(initialPage: widget.selectedIndex);
+  late final PageController _controller = PageController(
+    initialPage: widget.selectedIndex,
+  );
   late int _index = widget.selectedIndex;
 
   @override
   void didUpdateWidget(ProductGallery oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedIndex != oldWidget.selectedIndex && _controller.hasClients) {
+    if (widget.selectedIndex != oldWidget.selectedIndex &&
+        _controller.hasClients) {
       _controller.animateToPage(
         widget.selectedIndex,
         duration: const Duration(milliseconds: 280),
@@ -117,7 +120,10 @@ class _ProductGalleryState extends State<ProductGallery> {
                 ),
                 child: Text(
                   l10n.productImageCounter(_index + 1, images.length),
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

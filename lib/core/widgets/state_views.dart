@@ -19,25 +19,25 @@ class ErrorStateView extends StatelessWidget {
 
     final ({IconData icon, String title, String? hint}) view = switch (kind) {
       FailureKind.offline => (
-          icon: Icons.wifi_off_rounded,
-          title: l10n.stateErrorOffline,
-          hint: l10n.stateErrorOfflineHint,
-        ),
+        icon: Icons.wifi_off_rounded,
+        title: l10n.stateErrorOffline,
+        hint: l10n.stateErrorOfflineHint,
+      ),
       FailureKind.timeout => (
-          icon: Icons.timer_off_outlined,
-          title: l10n.stateErrorTimeout,
-          hint: null,
-        ),
+        icon: Icons.timer_off_outlined,
+        title: l10n.stateErrorTimeout,
+        hint: null,
+      ),
       FailureKind.server || FailureKind.notFound => (
-          icon: Icons.storefront_outlined,
-          title: l10n.stateErrorServer,
-          hint: null,
-        ),
+        icon: Icons.storefront_outlined,
+        title: l10n.stateErrorServer,
+        hint: null,
+      ),
       FailureKind.unknown => (
-          icon: Icons.error_outline_rounded,
-          title: l10n.stateErrorGeneric,
-          hint: null,
-        ),
+        icon: Icons.error_outline_rounded,
+        title: l10n.stateErrorGeneric,
+        hint: null,
+      ),
     };
 
     return _CenteredMessage(
@@ -100,7 +100,10 @@ class _CenteredMessage extends StatelessWidget {
             Container(
               width: 84,
               height: 84,
-              decoration: const BoxDecoration(color: RawnqColors.cream, shape: BoxShape.circle),
+              decoration: const BoxDecoration(
+                color: RawnqColors.cream,
+                shape: BoxShape.circle,
+              ),
               child: Icon(icon, size: 38, color: RawnqColors.brown),
             ),
             const SizedBox(height: RawnqSpace.lg),

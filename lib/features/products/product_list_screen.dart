@@ -78,7 +78,8 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
                   body: l10n.stateEmptyProductsHint,
                   action: _filter.hasActiveRefinements
                       ? OutlinedButton(
-                          onPressed: () => setState(() => _filter = _filter.reset()),
+                          onPressed: () =>
+                              setState(() => _filter = _filter.reset()),
                           child: Text(l10n.filterReset),
                         )
                       : null,
@@ -104,7 +105,8 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
             ),
             ProductSliverGrid(
               products: products,
-              onProductTap: (product) => context.push(Routes.productPath(product.id)),
+              onProductTap: (product) =>
+                  context.push(Routes.productPath(product.id)),
             ),
           ];
         },

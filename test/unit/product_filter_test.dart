@@ -16,7 +16,8 @@ void main() {
   });
 
   test('category narrows the list', () {
-    final result = ProductFilter(categoryId: Fixtures.pyjamas.id).apply(products);
+    final result = ProductFilter(categoryId: Fixtures.pyjamas.id)
+        .apply(products);
 
     expect(result.map((p) => p.id), <String>[Fixtures.pyjamaWithSizes.id]);
   });
@@ -39,37 +40,49 @@ void main() {
   test('only-new keeps products the shop labelled new', () {
     const filter = ProductFilter(onlyNew: true);
 
-    expect(filter.apply(products).map((p) => p.id),
-        <String>[Fixtures.pyjamaWithSizes.id]);
+    expect(filter.apply(products).map((p) => p.id), <String>[
+      Fixtures.pyjamaWithSizes.id,
+    ]);
   });
 
   test('the query matches product names with Arabic normalisation', () {
     const filter = ProductFilter(query: 'بجامه');
 
-    expect(filter.apply(products).map((p) => p.id),
-        <String>[Fixtures.pyjamaWithSizes.id]);
+    expect(filter.apply(products).map((p) => p.id), <String>[
+      Fixtures.pyjamaWithSizes.id,
+    ]);
   });
 
   test('the query also matches variant colour names', () {
     const filter = ProductFilter(query: 'sand');
 
-    expect(filter.apply(products).map((p) => p.id),
-        <String>[Fixtures.pyjamaWithSizes.id]);
+    expect(filter.apply(products).map((p) => p.id), <String>[
+      Fixtures.pyjamaWithSizes.id,
+    ]);
   });
 
   test('price sorting works in both directions', () {
     expect(
-      const ProductFilter(sort: ProductSort.priceAsc).apply(products).first.displayPrice,
+      const ProductFilter(sort: ProductSort.priceAsc)
+          .apply(products)
+          .first
+          .displayPrice,
       40,
     );
     expect(
-      const ProductFilter(sort: ProductSort.priceDesc).apply(products).first.displayPrice,
+      const ProductFilter(sort: ProductSort.priceDesc)
+          .apply(products)
+          .first
+          .displayPrice,
       100,
     );
   });
 
   test('filters combine', () {
-    const filter = ProductFilter(onlyAvailable: true, sort: ProductSort.priceAsc);
+    const filter = ProductFilter(
+      onlyAvailable: true,
+      sort: ProductSort.priceAsc,
+    );
 
     final result = filter.apply(products);
 
@@ -99,8 +112,10 @@ void main() {
   test('the refinement count drives the filter badge', () {
     expect(const ProductFilter().activeRefinementCount, 0);
     expect(
-      const ProductFilter(onlyNew: true, sort: ProductSort.priceAsc)
-          .activeRefinementCount,
+      const ProductFilter(
+        onlyNew: true,
+        sort: ProductSort.priceAsc,
+      ).activeRefinementCount,
       2,
     );
   });

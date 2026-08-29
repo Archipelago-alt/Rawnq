@@ -16,7 +16,8 @@ final connectivityProvider = StreamProvider<bool>((ref) async* {
 
 /// True when at least one interface is up.
 bool _isOnline(List<ConnectivityResult> results) =>
-    results.isNotEmpty && results.any((result) => result != ConnectivityResult.none);
+    results.isNotEmpty &&
+    results.any((result) => result != ConnectivityResult.none);
 
 /// Null while unknown, so callers can distinguish "offline" from "not yet
 /// determined" and avoid flashing a banner on start-up.

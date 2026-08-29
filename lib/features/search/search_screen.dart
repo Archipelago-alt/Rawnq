@@ -103,7 +103,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         ),
       ),
       body: CatalogView(
-        skeleton: (context) => const <Widget>[ProductSliverGridSkeleton(itemCount: 4)],
+        skeleton: (context) => const <Widget>[
+          ProductSliverGridSkeleton(itemCount: 4),
+        ],
         builder: (context, data) {
           if (_filter.query.trim().isEmpty && !_filter.hasActiveRefinements) {
             return <Widget>[
@@ -149,7 +151,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             ),
             ProductSliverGrid(
               products: results,
-              onProductTap: (product) => context.push(Routes.productPath(product.id)),
+              onProductTap: (product) =>
+                  context.push(Routes.productPath(product.id)),
             ),
           ];
         },

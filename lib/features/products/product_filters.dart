@@ -28,14 +28,17 @@ class ProductFilter {
 
   /// True when anything narrows the list beyond the screen's own scope.
   bool get hasActiveRefinements =>
-      brandId != null || onlyAvailable || onlyNew || sort != ProductSort.defaultOrder;
+      brandId != null ||
+      onlyAvailable ||
+      onlyNew ||
+      sort != ProductSort.defaultOrder;
 
   int get activeRefinementCount => <bool>[
-        brandId != null,
-        onlyAvailable,
-        onlyNew,
-        sort != ProductSort.defaultOrder,
-      ].where((active) => active).length;
+    brandId != null,
+    onlyAvailable,
+    onlyNew,
+    sort != ProductSort.defaultOrder,
+  ].where((active) => active).length;
 
   ProductFilter copyWith({
     String? categoryId,
@@ -46,15 +49,14 @@ class ProductFilter {
     bool? onlyAvailable,
     bool? onlyNew,
     ProductSort? sort,
-  }) =>
-      ProductFilter(
-        categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
-        brandId: clearBrand ? null : (brandId ?? this.brandId),
-        query: query ?? this.query,
-        onlyAvailable: onlyAvailable ?? this.onlyAvailable,
-        onlyNew: onlyNew ?? this.onlyNew,
-        sort: sort ?? this.sort,
-      );
+  }) => ProductFilter(
+    categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
+    brandId: clearBrand ? null : (brandId ?? this.brandId),
+    query: query ?? this.query,
+    onlyAvailable: onlyAvailable ?? this.onlyAvailable,
+    onlyNew: onlyNew ?? this.onlyNew,
+    sort: sort ?? this.sort,
+  );
 
   /// Drops every refinement but keeps the screen's own scope (its category)
   /// and the current search term.
@@ -102,7 +104,8 @@ class ProductFilter {
   bool _matchesQuery(Product product) {
     if (ArabicText.matches(product.name, query)) return true;
     final description = product.description;
-    if (description != null && ArabicText.matches(description, query)) return true;
+    if (description != null && ArabicText.matches(description, query))
+      return true;
     for (final variant in product.variants) {
       if (ArabicText.matches(variant.name, query)) return true;
       final color = variant.color;
@@ -122,5 +125,6 @@ class ProductFilter {
       other.sort == sort;
 
   @override
-  int get hashCode => Object.hash(categoryId, brandId, query, onlyAvailable, onlyNew, sort);
+  int get hashCode =>
+      Object.hash(categoryId, brandId, query, onlyAvailable, onlyNew, sort);
 }

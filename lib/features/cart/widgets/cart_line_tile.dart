@@ -20,8 +20,10 @@ class CartLineTile extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final options = <String>[
-      if ((item.color ?? '').isNotEmpty) '${l10n.whatsappOrderColor}: ${item.color}',
-      if ((item.size ?? '').isNotEmpty) '${l10n.whatsappOrderSize}: ${item.size}',
+      if ((item.color ?? '').isNotEmpty)
+        '${l10n.whatsappOrderColor}: ${item.color}',
+      if ((item.size ?? '').isNotEmpty)
+        '${l10n.whatsappOrderSize}: ${item.size}',
     ].join('  •  ');
 
     return Container(
@@ -53,7 +55,9 @@ class CartLineTile extends ConsumerWidget {
                   item.name,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 if (options.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 2),
@@ -79,7 +83,10 @@ class CartLineTile extends ConsumerWidget {
           IconButton(
             tooltip: l10n.cartRemove,
             onPressed: onRemove,
-            icon: const Icon(Icons.delete_outline_rounded, color: RawnqColors.inkSoft),
+            icon: const Icon(
+              Icons.delete_outline_rounded,
+              color: RawnqColors.inkSoft,
+            ),
           ),
         ],
       ),
@@ -109,7 +116,8 @@ class _QuantityStepper extends ConsumerWidget {
           _StepButton(
             icon: Icons.remove_rounded,
             tooltip: l10n.cartDecrease,
-            onPressed: () => ref.read(cartProvider.notifier).decrement(item.key),
+            onPressed: () =>
+                ref.read(cartProvider.notifier).decrement(item.key),
           ),
           SizedBox(
             width: 34,
@@ -125,14 +133,19 @@ class _QuantityStepper extends ConsumerWidget {
             onPressed: !canIncrease
                 ? null
                 : () {
-                    final result = ref.read(cartProvider.notifier).increment(item.key);
-                    if (!result.isSuccess && result.error == CartAddError.maxQuantity) {
+                    final result = ref
+                        .read(cartProvider.notifier)
+                        .increment(item.key);
+                    if (!result.isSuccess &&
+                        result.error == CartAddError.maxQuantity) {
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
                           SnackBar(
                             content: Text(
-                              l10n.cartMaxQuantityReached(result.availableQuantity ?? 0),
+                              l10n.cartMaxQuantityReached(
+                                result.availableQuantity ?? 0,
+                              ),
                             ),
                           ),
                         );
@@ -146,7 +159,11 @@ class _QuantityStepper extends ConsumerWidget {
 }
 
 class _StepButton extends StatelessWidget {
-  const _StepButton({required this.icon, required this.tooltip, this.onPressed});
+  const _StepButton({
+    required this.icon,
+    required this.tooltip,
+    this.onPressed,
+  });
 
   final IconData icon;
   final String tooltip;

@@ -38,10 +38,13 @@ class _WebCheckoutScreenState extends State<WebCheckoutScreen> {
           },
           onNavigationRequest: (request) {
             final uri = Uri.tryParse(request.url);
-            final allowed = uri != null &&
+            final allowed =
+                uri != null &&
                 uri.isScheme('https') &&
                 uri.host == _target.host;
-            return allowed ? NavigationDecision.navigate : NavigationDecision.prevent;
+            return allowed
+                ? NavigationDecision.navigate
+                : NavigationDecision.prevent;
           },
         ),
       )

@@ -47,7 +47,9 @@ class BrandStrip extends StatelessWidget {
                         url: brand.logoUrl,
                         fit: BoxFit.contain,
                         decodeWidth: 120,
-                        borderRadius: BorderRadius.circular(RawnqSpace.radiusSm),
+                        borderRadius: BorderRadius.circular(
+                          RawnqSpace.radiusSm,
+                        ),
                       ),
                     ),
                     const SizedBox(width: RawnqSpace.sm),

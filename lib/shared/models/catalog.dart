@@ -24,15 +24,18 @@ class Catalog {
   });
 
   factory Catalog.fromSnapshot(Map<String, dynamic> json) => Catalog(
-        store: StoreInfo.fromJson(json['store'] as Map<String, dynamic>),
-        categories: _list(json['categories'], ProductCategory.fromJson),
-        brands: _list(json['brands'], Brand.fromJson),
-        products: _list(json['products'], (j) => Product.fromJson(j)),
-        deliveryLocations: _list(json['deliveryLocations'], DeliveryLocation.fromJson),
-        paymentMethods: _list(json['paymentMethods'], StorePaymentMethod.fromJson),
-        isLiveData: false,
-        capturedAt: DateTime.tryParse(json['capturedAt'] as String? ?? ''),
-      );
+    store: StoreInfo.fromJson(json['store'] as Map<String, dynamic>),
+    categories: _list(json['categories'], ProductCategory.fromJson),
+    brands: _list(json['brands'], Brand.fromJson),
+    products: _list(json['products'], (j) => Product.fromJson(j)),
+    deliveryLocations: _list(
+      json['deliveryLocations'],
+      DeliveryLocation.fromJson,
+    ),
+    paymentMethods: _list(json['paymentMethods'], StorePaymentMethod.fromJson),
+    isLiveData: false,
+    capturedAt: DateTime.tryParse(json['capturedAt'] as String? ?? ''),
+  );
 
   final StoreInfo store;
   final List<ProductCategory> categories;
@@ -83,6 +86,8 @@ class Catalog {
 
   static List<T> _list<T>(Object? raw, T Function(Map<String, dynamic>) build) {
     if (raw is! List) return const [];
-    return List<T>.unmodifiable(raw.whereType<Map<String, dynamic>>().map(build));
+    return List<T>.unmodifiable(
+      raw.whereType<Map<String, dynamic>>().map(build),
+    );
   }
 }

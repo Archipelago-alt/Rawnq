@@ -41,11 +41,7 @@ class RawnqSpace {
 
 /// Soft, warm elevation — the brief asks for subtle shadows, not drop shadows.
 const List<BoxShadow> kCardShadow = <BoxShadow>[
-  BoxShadow(
-    color: Color(0x147C3918),
-    blurRadius: 18,
-    offset: Offset(0, 6),
-  ),
+  BoxShadow(color: Color(0x147C3918), blurRadius: 18, offset: Offset(0, 6)),
 ];
 
 ThemeData buildRawnqTheme() {
@@ -107,7 +103,10 @@ ThemeData buildRawnqTheme() {
     chipTheme: ChipThemeData(
       backgroundColor: RawnqColors.cream,
       selectedColor: RawnqColors.brown,
-      labelStyle: const TextStyle(fontFamily: 'Tajawal', fontWeight: FontWeight.w500),
+      labelStyle: const TextStyle(
+        fontFamily: 'Tajawal',
+        fontWeight: FontWeight.w500,
+      ),
       side: const BorderSide(color: RawnqColors.line),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(RawnqSpace.radiusLg),
@@ -147,7 +146,10 @@ ThemeData buildRawnqTheme() {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: RawnqColors.brown,
-        textStyle: const TextStyle(fontFamily: 'Tajawal', fontWeight: FontWeight.w600),
+        textStyle: const TextStyle(
+          fontFamily: 'Tajawal',
+          fontWeight: FontWeight.w600,
+        ),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -189,7 +191,9 @@ ThemeData buildRawnqTheme() {
         (states) => TextStyle(
           fontFamily: 'Tajawal',
           fontSize: 11,
-          fontWeight: states.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
+          fontWeight: states.contains(WidgetState.selected)
+              ? FontWeight.w700
+              : FontWeight.w500,
           color: states.contains(WidgetState.selected)
               ? RawnqColors.brown
               : RawnqColors.inkSoft,
@@ -204,10 +208,17 @@ ThemeData buildRawnqTheme() {
         ),
       ),
     ),
-    dividerTheme: const DividerThemeData(color: RawnqColors.line, thickness: 1, space: 1),
+    dividerTheme: const DividerThemeData(
+      color: RawnqColors.line,
+      thickness: 1,
+      space: 1,
+    ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: RawnqColors.ink,
-      contentTextStyle: const TextStyle(fontFamily: 'Tajawal', color: Colors.white),
+      contentTextStyle: const TextStyle(
+        fontFamily: 'Tajawal',
+        color: Colors.white,
+      ),
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(RawnqSpace.radiusMd),
@@ -217,35 +228,37 @@ ThemeData buildRawnqTheme() {
       backgroundColor: RawnqColors.surface,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(RawnqSpace.radiusLg)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(RawnqSpace.radiusLg),
+        ),
       ),
     ),
   );
 }
 
 TextTheme _textTheme(TextTheme base) => base.copyWith(
-      displaySmall: base.displaySmall?.copyWith(
-        fontWeight: FontWeight.w800,
-        color: RawnqColors.ink,
-        height: 1.3,
-      ),
-      headlineSmall: base.headlineSmall?.copyWith(
-        fontWeight: FontWeight.w700,
-        color: RawnqColors.ink,
-        height: 1.35,
-      ),
-      titleLarge: base.titleLarge?.copyWith(
-        fontWeight: FontWeight.w700,
-        color: RawnqColors.ink,
-        height: 1.4,
-      ),
-      titleMedium: base.titleMedium?.copyWith(
-        fontWeight: FontWeight.w700,
-        color: RawnqColors.ink,
-        height: 1.45,
-      ),
-      bodyLarge: base.bodyLarge?.copyWith(color: RawnqColors.ink, height: 1.6),
-      bodyMedium: base.bodyMedium?.copyWith(color: RawnqColors.ink, height: 1.7),
-      bodySmall: base.bodySmall?.copyWith(color: RawnqColors.inkSoft, height: 1.6),
-      labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w700),
-    );
+  displaySmall: base.displaySmall?.copyWith(
+    fontWeight: FontWeight.w800,
+    color: RawnqColors.ink,
+    height: 1.3,
+  ),
+  headlineSmall: base.headlineSmall?.copyWith(
+    fontWeight: FontWeight.w700,
+    color: RawnqColors.ink,
+    height: 1.35,
+  ),
+  titleLarge: base.titleLarge?.copyWith(
+    fontWeight: FontWeight.w700,
+    color: RawnqColors.ink,
+    height: 1.4,
+  ),
+  titleMedium: base.titleMedium?.copyWith(
+    fontWeight: FontWeight.w700,
+    color: RawnqColors.ink,
+    height: 1.45,
+  ),
+  bodyLarge: base.bodyLarge?.copyWith(color: RawnqColors.ink, height: 1.6),
+  bodyMedium: base.bodyMedium?.copyWith(color: RawnqColors.ink, height: 1.7),
+  bodySmall: base.bodySmall?.copyWith(color: RawnqColors.inkSoft, height: 1.6),
+  labelLarge: base.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+);

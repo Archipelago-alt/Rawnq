@@ -66,14 +66,21 @@ class _ImageFallback extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const Icon(Icons.checkroom_outlined, color: RawnqColors.inkSoft, size: 28),
+            const Icon(
+              Icons.checkroom_outlined,
+              color: RawnqColors.inkSoft,
+              size: 28,
+            ),
             const SizedBox(height: RawnqSpace.xs),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.sm),
               child: Text(
                 l10n.stateImageUnavailable,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 11, color: RawnqColors.inkSoft),
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: RawnqColors.inkSoft,
+                ),
               ),
             ),
           ],

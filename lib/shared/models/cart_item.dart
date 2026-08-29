@@ -29,29 +29,33 @@ class CartItem {
     return CartItem(
       productId: product.id,
       name: product.name,
-      unitPrice: variant?.price != null && variant!.price > 0 ? variant.price : product.price,
+      unitPrice: variant?.price != null && variant!.price > 0
+          ? variant.price
+          : product.price,
       quantity: quantity,
       variantId: variant?.id,
       variantLabel: variant?.name,
       color: variant?.color,
       size: variant?.size,
       imageUrl: variant?.imageUrl ?? product.primaryImage,
-      maxQuantity: variant != null ? variant.stock.floor() : product.stock.floor(),
+      maxQuantity: variant != null
+          ? variant.stock.floor()
+          : product.stock.floor(),
     );
   }
 
   factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
-        productId: json['productId'] as String? ?? '',
-        name: json['name'] as String? ?? '',
-        unitPrice: (json['unitPrice'] as num?)?.toDouble() ?? 0,
-        quantity: (json['quantity'] as num?)?.toInt() ?? 1,
-        variantId: json['variantId'] as String?,
-        variantLabel: json['variantLabel'] as String?,
-        color: json['color'] as String?,
-        size: json['size'] as String?,
-        imageUrl: json['imageUrl'] as String?,
-        maxQuantity: (json['maxQuantity'] as num?)?.toInt(),
-      );
+    productId: json['productId'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+    unitPrice: (json['unitPrice'] as num?)?.toDouble() ?? 0,
+    quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+    variantId: json['variantId'] as String?,
+    variantLabel: json['variantLabel'] as String?,
+    color: json['color'] as String?,
+    size: json['size'] as String?,
+    imageUrl: json['imageUrl'] as String?,
+    maxQuantity: (json['maxQuantity'] as num?)?.toInt(),
+  );
 
   final String productId;
   final String name;
@@ -73,30 +77,30 @@ class CartItem {
   double get lineTotal => unitPrice * quantity;
 
   CartItem copyWith({int? quantity}) => CartItem(
-        productId: productId,
-        name: name,
-        unitPrice: unitPrice,
-        quantity: quantity ?? this.quantity,
-        variantId: variantId,
-        variantLabel: variantLabel,
-        color: color,
-        size: size,
-        imageUrl: imageUrl,
-        maxQuantity: maxQuantity,
-      );
+    productId: productId,
+    name: name,
+    unitPrice: unitPrice,
+    quantity: quantity ?? this.quantity,
+    variantId: variantId,
+    variantLabel: variantLabel,
+    color: color,
+    size: size,
+    imageUrl: imageUrl,
+    maxQuantity: maxQuantity,
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'productId': productId,
-        'name': name,
-        'unitPrice': unitPrice,
-        'quantity': quantity,
-        if (variantId != null) 'variantId': variantId,
-        if (variantLabel != null) 'variantLabel': variantLabel,
-        if (color != null) 'color': color,
-        if (size != null) 'size': size,
-        if (imageUrl != null) 'imageUrl': imageUrl,
-        if (maxQuantity != null) 'maxQuantity': maxQuantity,
-      };
+    'productId': productId,
+    'name': name,
+    'unitPrice': unitPrice,
+    'quantity': quantity,
+    if (variantId != null) 'variantId': variantId,
+    if (variantLabel != null) 'variantLabel': variantLabel,
+    if (color != null) 'color': color,
+    if (size != null) 'size': size,
+    if (imageUrl != null) 'imageUrl': imageUrl,
+    if (maxQuantity != null) 'maxQuantity': maxQuantity,
+  };
 
   @override
   bool operator ==(Object other) =>

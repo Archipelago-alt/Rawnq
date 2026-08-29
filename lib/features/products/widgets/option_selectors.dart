@@ -87,7 +87,11 @@ class _Swatch extends StatelessWidget {
                   ),
                 ),
                 child: color == null
-                    ? const Icon(Icons.palette_outlined, size: 18, color: RawnqColors.inkSoft)
+                    ? const Icon(
+                        Icons.palette_outlined,
+                        size: 18,
+                        color: RawnqColors.inkSoft,
+                      )
                     : null,
               ),
               const SizedBox(height: RawnqSpace.xs),

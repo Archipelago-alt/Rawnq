@@ -43,7 +43,8 @@ class ContactScreen extends ConsumerWidget {
                         icon: Icons.chat_rounded,
                         title: l10n.contactWhatsapp,
                         subtitle: store.whatsapp,
-                        onTap: () => _open(context, Uri.https('wa.me', '/$whatsapp')),
+                        onTap: () =>
+                            _open(context, Uri.https('wa.me', '/$whatsapp')),
                       ),
                     if (store.whatsapp != null)
                       _ActionTile(
@@ -52,14 +53,20 @@ class ContactScreen extends ConsumerWidget {
                         subtitle: store.whatsapp,
                         onTap: () => _open(
                           context,
-                          Uri(scheme: 'tel', path: store.whatsapp!.replaceAll(' ', '')),
+                          Uri(
+                            scheme: 'tel',
+                            path: store.whatsapp!.replaceAll(' ', ''),
+                          ),
                         ),
                       ),
                     if (store.email != null)
                       _ActionTile(
                         icon: Icons.mail_outline_rounded,
                         title: store.email!,
-                        onTap: () => _open(context, Uri(scheme: 'mailto', path: store.email)),
+                        onTap: () => _open(
+                          context,
+                          Uri(scheme: 'mailto', path: store.email),
+                        ),
                       ),
                     if (store.instagram != null)
                       _ActionTile(
@@ -80,9 +87,15 @@ class ContactScreen extends ConsumerWidget {
                     ),
 
                     const SizedBox(height: RawnqSpace.xl),
-                    Text(l10n.contactStoreInfo, style: Theme.of(context).textTheme.titleMedium),
+                    Text(
+                      l10n.contactStoreInfo,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: RawnqSpace.md),
-                    _InfoCard(store: store, catalogSummary: _summary(context, catalog)),
+                    _InfoCard(
+                      store: store,
+                      catalogSummary: _summary(context, catalog),
+                    ),
 
                     const SizedBox(height: RawnqSpace.xl),
                     _ActionTile(
@@ -126,9 +139,11 @@ class ContactScreen extends ConsumerWidget {
         (
           l10n.contactDeliveryAreas,
           catalog.deliveryLocations
-              .map((location) => location.isFree
-                  ? '${location.name} — ${l10n.cartFreeDelivery}'
-                  : '${location.name} — ${Money.format(location.price)}')
+              .map(
+                (location) => location.isFree
+                    ? '${location.name} — ${l10n.cartFreeDelivery}'
+                    : '${location.name} — ${Money.format(location.price)}',
+              )
               .join('\n'),
         ),
       if (catalog.paymentMethods.isNotEmpty)
@@ -200,7 +215,10 @@ class _ActionTile extends StatelessWidget {
                       textDirection: TextDirection.ltr,
                       textAlign: TextAlign.right,
                     ),
-              trailing: const Icon(Icons.chevron_left_rounded, color: RawnqColors.inkSoft),
+              trailing: const Icon(
+                Icons.chevron_left_rounded,
+                color: RawnqColors.inkSoft,
+              ),
             ),
           ),
         ),
@@ -241,7 +259,9 @@ class _InfoCard extends StatelessWidget {
             const SizedBox(height: RawnqSpace.md),
             Text(
               label,
-              style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
             const SizedBox(height: 2),
             Text(value, style: theme.textTheme.bodyMedium),

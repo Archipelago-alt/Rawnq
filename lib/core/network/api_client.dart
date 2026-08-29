@@ -11,8 +11,8 @@ import '../utils/result.dart';
 /// See `docs/api-integration.md` for why.
 class ApiClient {
   ApiClient({required AppConfig config, Dio? dio})
-      : _config = config,
-        _dio = dio ?? Dio() {
+    : _config = config,
+      _dio = dio ?? Dio() {
     _dio.options = _dio.options.copyWith(
       baseUrl: config.restBaseUrl,
       connectTimeout: const Duration(seconds: 12),
@@ -61,10 +61,16 @@ class ApiClient {
     required Map<String, String> query,
   }) async {
     try {
-      final response = await _dio.get<dynamic>('/$table', queryParameters: query);
+      final response = await _dio.get<dynamic>(
+        '/$table',
+        queryParameters: query,
+      );
       final data = response.data;
       if (data is! List) {
-        throw const Failure(FailureKind.server, detail: 'unexpected payload shape');
+        throw const Failure(
+          FailureKind.server,
+          detail: 'unexpected payload shape',
+        );
       }
       return data.whereType<Map<String, dynamic>>().toList(growable: false);
     } on DioException catch (error) {
@@ -73,8 +79,9 @@ class ApiClient {
   }
 
   /// Tenant filter shared by every storefront query.
-  Map<String, String> tenantFilter(String tenantId) =>
-      <String, String>{'tenant_id': 'eq.$tenantId'};
+  Map<String, String> tenantFilter(String tenantId) => <String, String>{
+    'tenant_id': 'eq.$tenantId',
+  };
 
   String get tenantSlug => _config.tenantSlug;
 

@@ -15,13 +15,13 @@ class AppConfig {
 
   /// Reads configuration from the compile-time environment.
   factory AppConfig.fromEnvironment() => const AppConfig(
-        supabaseUrl: String.fromEnvironment('RAWNQ_SUPABASE_URL'),
-        supabaseAnonKey: String.fromEnvironment('RAWNQ_SUPABASE_ANON_KEY'),
-        tenantSlug: String.fromEnvironment(
-          'RAWNQ_TENANT_SLUG',
-          defaultValue: 'rawnqgaza',
-        ),
-      );
+    supabaseUrl: String.fromEnvironment('RAWNQ_SUPABASE_URL'),
+    supabaseAnonKey: String.fromEnvironment('RAWNQ_SUPABASE_ANON_KEY'),
+    tenantSlug: String.fromEnvironment(
+      'RAWNQ_TENANT_SLUG',
+      defaultValue: 'rawnqgaza',
+    ),
+  );
 
   final String supabaseUrl;
   final String supabaseAnonKey;
@@ -35,7 +35,8 @@ class AppConfig {
   }
 
   /// Base URL of the storefront's PostgREST API.
-  String get restBaseUrl => '${supabaseUrl.replaceAll(RegExp(r'/+$'), '')}/rest/v1';
+  String get restBaseUrl =>
+      '${supabaseUrl.replaceAll(RegExp(r'/+$'), '')}/rest/v1';
 }
 
 /// Public, non-secret facts about the storefront the app is built for.
@@ -49,7 +50,10 @@ class StorefrontLinks {
   static const String storeSlug = 'rawnqgaza';
 
   static Uri get storefront => Uri.parse('$websiteBase/$storeSlug/mobile');
-  static Uri get storefrontCart => Uri.parse('$websiteBase/$storeSlug/mobile/cart');
-  static Uri get privacyPolicy => Uri.parse('$websiteBase/$storeSlug/mobile/privacy');
-  static Uri get termsConditions => Uri.parse('$websiteBase/$storeSlug/mobile/terms');
+  static Uri get storefrontCart =>
+      Uri.parse('$websiteBase/$storeSlug/mobile/cart');
+  static Uri get privacyPolicy =>
+      Uri.parse('$websiteBase/$storeSlug/mobile/privacy');
+  static Uri get termsConditions =>
+      Uri.parse('$websiteBase/$storeSlug/mobile/terms');
 }

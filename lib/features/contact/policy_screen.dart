@@ -42,8 +42,10 @@ class PolicyScreen extends ConsumerWidget {
         builder: (context, catalog) {
           final store = catalog.store;
           final body = switch (kind) {
-            PolicyKind.privacy => store.hasPrivacyPolicy ? store.privacyPolicy : null,
-            PolicyKind.terms => store.hasTermsConditions ? store.termsConditions : null,
+            PolicyKind.privacy =>
+              store.hasPrivacyPolicy ? store.privacyPolicy : null,
+            PolicyKind.terms =>
+              store.hasTermsConditions ? store.termsConditions : null,
           };
           final webUrl = switch (kind) {
             PolicyKind.privacy => StorefrontLinks.privacyPolicy,
@@ -72,7 +74,10 @@ class PolicyScreen extends ConsumerWidget {
             SliverPadding(
               padding: const EdgeInsets.all(RawnqSpace.lg),
               sliver: SliverToBoxAdapter(
-                child: Text(body, style: Theme.of(context).textTheme.bodyMedium),
+                child: Text(
+                  body,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ),
           ];

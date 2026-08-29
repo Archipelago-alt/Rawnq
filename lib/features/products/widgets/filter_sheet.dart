@@ -147,9 +147,9 @@ class _FilterSheetState extends State<_FilterSheet> {
 }
 
 String _sortLabel(AppLocalizations l10n, ProductSort sort) => switch (sort) {
-      ProductSort.defaultOrder => l10n.sortDefault,
-      ProductSort.priceAsc => l10n.sortPriceAsc,
-      ProductSort.priceDesc => l10n.sortPriceDesc,
-      ProductSort.nameAsc => l10n.sortNameAsc,
-      ProductSort.newest => l10n.sortNewest,
-    };
+  ProductSort.defaultOrder => l10n.sortDefault,
+  ProductSort.priceAsc => l10n.sortPriceAsc,
+  ProductSort.priceDesc => l10n.sortPriceDesc,
+  ProductSort.nameAsc => l10n.sortNameAsc,
+  ProductSort.newest => l10n.sortNewest,
+};

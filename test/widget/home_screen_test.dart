@@ -12,7 +12,9 @@ import '../support/fixtures.dart';
 import '../support/harness.dart';
 
 void main() {
-  testWidgets('shows the brand header, categories, brands and products', (tester) async {
+  testWidgets('shows the brand header, categories, brands and products', (
+    tester,
+  ) async {
     await pumpScreen(tester, const HomeScreen());
     await settle(tester);
 
@@ -23,7 +25,9 @@ void main() {
     expect(find.byType(ProductCard), findsWidgets);
   });
 
-  testWidgets('renders the real category names from the catalogue', (tester) async {
+  testWidgets('renders the real category names from the catalogue', (
+    tester,
+  ) async {
     await pumpScreen(tester, const HomeScreen());
     await settle(tester);
 
@@ -48,8 +52,9 @@ void main() {
     expect(find.byType(ProductCard), findsWidgets);
   });
 
-  testWidgets('shows an offline state with a retry action when loading fails',
-      (tester) async {
+  testWidgets('shows an offline state with a retry action when loading fails', (
+    tester,
+  ) async {
     await pumpScreen(
       tester,
       const HomeScreen(),
@@ -64,29 +69,31 @@ void main() {
     expect(find.text('إعادة المحاولة'), findsOneWidget);
   });
 
-  testWidgets('labels bundled snapshot data instead of passing it off as live',
-      (tester) async {
-    await pumpScreen(
-      tester,
-      const HomeScreen(),
-      repository: FakeCatalogRepository(
-        catalog: Catalog(
-          store: Fixtures.store,
-          categories: const [],
-          brands: const [],
-          products: const [],
-          deliveryLocations: const [],
-          paymentMethods: const [],
-          isLiveData: false,
-          capturedAt: DateTime.utc(2026, 8, 29),
+  testWidgets(
+    'labels bundled snapshot data instead of passing it off as live',
+    (tester) async {
+      await pumpScreen(
+        tester,
+        const HomeScreen(),
+        repository: FakeCatalogRepository(
+          catalog: Catalog(
+            store: Fixtures.store,
+            categories: const [],
+            brands: const [],
+            products: const [],
+            deliveryLocations: const [],
+            paymentMethods: const [],
+            isLiveData: false,
+            capturedAt: DateTime.utc(2026, 8, 29),
+          ),
         ),
-      ),
-    );
-    await settle(tester);
+      );
+      await settle(tester);
 
-    expect(find.byType(NoticeBanner), findsOneWidget);
-    expect(find.textContaining('بيانات محلية'), findsOneWidget);
-  });
+      expect(find.byType(NoticeBanner), findsOneWidget);
+      expect(find.textContaining('بيانات محلية'), findsOneWidget);
+    },
+  );
 
   testWidgets('live data shows no local-data banner', (tester) async {
     await pumpScreen(tester, const HomeScreen());
@@ -95,12 +102,18 @@ void main() {
     expect(find.byType(NoticeBanner), findsNothing);
   });
 
-  testWidgets('pull to refresh asks the repository for fresh data', (tester) async {
+  testWidgets('pull to refresh asks the repository for fresh data', (
+    tester,
+  ) async {
     final repository = FakeCatalogRepository();
     await pumpScreen(tester, const HomeScreen(), repository: repository);
     await settle(tester);
 
-    await tester.fling(find.byType(CustomScrollView), const Offset(0, 400), 1000);
+    await tester.fling(
+      find.byType(CustomScrollView),
+      const Offset(0, 400),
+      1000,
+    );
     await settle(tester);
 
     expect(repository.forceRefreshCount, greaterThan(0));

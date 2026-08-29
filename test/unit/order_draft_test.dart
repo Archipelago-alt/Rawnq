@@ -31,7 +31,8 @@ OrderDraft buildDraft({
     reference: 'R2608123',
     name: 'سارة',
     phone: '0593208117',
-    items: items ??
+    items:
+        items ??
         <CartItem>[
           const CartItem(
             productId: 'p1',
@@ -86,11 +87,17 @@ void main() {
     });
 
     test('free delivery is worded, not printed as 0', () {
-      expect(buildDraft().toWhatsappMessage(_labels), contains('رسوم التوصيل: مجاني'));
+      expect(
+        buildDraft().toWhatsappMessage(_labels),
+        contains('رسوم التوصيل: مجاني'),
+      );
     });
 
     test('notes appear only when the shopper wrote some', () {
-      expect(buildDraft().toWhatsappMessage(_labels), isNot(contains('ملاحظات:')));
+      expect(
+        buildDraft().toWhatsappMessage(_labels),
+        isNot(contains('ملاحظات:')),
+      );
       expect(
         buildDraft(notes: 'الرجاء التغليف كهدية').toWhatsappMessage(_labels),
         contains('ملاحظات: الرجاء التغليف كهدية'),
@@ -98,8 +105,10 @@ void main() {
     });
 
     test('whitespace-only notes are treated as no notes', () {
-      expect(buildDraft(notes: '   ').toWhatsappMessage(_labels),
-          isNot(contains('ملاحظات:')));
+      expect(
+        buildDraft(notes: '   ').toWhatsappMessage(_labels),
+        isNot(contains('ملاحظات:')),
+      );
     });
 
     test('option lines are omitted for a product with no colour or size', () {
@@ -131,9 +140,16 @@ void main() {
 
       // Arabic must survive the round trip as UTF-8 percent-encoding.
       expect(uri.queryParameters['text'], contains('سارة'));
-      expect(uri.toString(), contains('%D8%B3'), reason: 'Arabic is percent-encoded');
-      expect(uri.toString(), isNot(contains('سارة')),
-          reason: 'raw Arabic must not appear in the encoded URL');
+      expect(
+        uri.toString(),
+        contains('%D8%B3'),
+        reason: 'Arabic is percent-encoded',
+      );
+      expect(
+        uri.toString(),
+        isNot(contains('سارة')),
+        reason: 'raw Arabic must not appear in the encoded URL',
+      );
     });
 
     test('the decoded text round-trips to the original message', () {

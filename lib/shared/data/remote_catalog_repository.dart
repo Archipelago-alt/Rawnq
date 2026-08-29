@@ -16,8 +16,8 @@ class RemoteCatalogRepository implements CatalogRepository {
   RemoteCatalogRepository({
     required ApiClient client,
     Duration cacheTtl = const Duration(minutes: 10),
-  })  : _client = client,
-        _cacheTtl = cacheTtl;
+  }) : _client = client,
+       _cacheTtl = cacheTtl;
 
   final ApiClient _client;
   final Duration _cacheTtl;
@@ -29,7 +29,8 @@ class RemoteCatalogRepository implements CatalogRepository {
   Future<Catalog> loadCatalog({bool forceRefresh = false}) async {
     final cached = _cached;
     final cachedAt = _cachedAt;
-    final isFresh = cached != null &&
+    final isFresh =
+        cached != null &&
         cachedAt != null &&
         DateTime.now().difference(cachedAt) < _cacheTtl;
     if (isFresh && !forceRefresh) return cached;
@@ -39,40 +40,58 @@ class RemoteCatalogRepository implements CatalogRepository {
 
     // Independent requests, so run them together rather than in sequence.
     final requests = <Future<List<Map<String, dynamic>>>>[
-      _client.selectAll('categories', query: <String, String>{
-        ...tenant,
-        'select': '*',
-        'is_active': 'eq.true',
-        'order': 'sort_order.asc',
-      }),
-      _client.selectAll('brands', query: <String, String>{
-        ...tenant,
-        'select': '*',
-        'is_active': 'eq.true',
-        'order': 'sort_order.asc',
-      }),
-      _client.selectAll('products', query: <String, String>{
-        ...tenant,
-        'select': '*',
-        'is_active': 'eq.true',
-        'order': 'sort_order.asc',
-      }),
-      _client.selectAll('product_variants', query: <String, String>{
-        ...tenant,
-        'select': '*',
-        'is_active': 'eq.true',
-        'order': 'sort_order.asc',
-      }),
-      _client.selectAll('delivery_locations', query: <String, String>{
-        ...tenant,
-        'select': '*',
-        'is_active': 'eq.true',
-      }),
-      _client.selectAll('payment_methods', query: <String, String>{
-        ...tenant,
-        'select': '*',
-        'is_active': 'eq.true',
-      }),
+      _client.selectAll(
+        'categories',
+        query: <String, String>{
+          ...tenant,
+          'select': '*',
+          'is_active': 'eq.true',
+          'order': 'sort_order.asc',
+        },
+      ),
+      _client.selectAll(
+        'brands',
+        query: <String, String>{
+          ...tenant,
+          'select': '*',
+          'is_active': 'eq.true',
+          'order': 'sort_order.asc',
+        },
+      ),
+      _client.selectAll(
+        'products',
+        query: <String, String>{
+          ...tenant,
+          'select': '*',
+          'is_active': 'eq.true',
+          'order': 'sort_order.asc',
+        },
+      ),
+      _client.selectAll(
+        'product_variants',
+        query: <String, String>{
+          ...tenant,
+          'select': '*',
+          'is_active': 'eq.true',
+          'order': 'sort_order.asc',
+        },
+      ),
+      _client.selectAll(
+        'delivery_locations',
+        query: <String, String>{
+          ...tenant,
+          'select': '*',
+          'is_active': 'eq.true',
+        },
+      ),
+      _client.selectAll(
+        'payment_methods',
+        query: <String, String>{
+          ...tenant,
+          'select': '*',
+          'is_active': 'eq.true',
+        },
+      ),
     ];
 
     // Future.wait surfaces only the first error; without a listener on each
@@ -88,23 +107,33 @@ class RemoteCatalogRepository implements CatalogRepository {
     for (final row in results[3]) {
       final variant = ProductVariant.fromJson(row);
       if (variant.productId.isEmpty) continue;
-      variantsByProduct.putIfAbsent(variant.productId, () => <ProductVariant>[]).add(variant);
+      variantsByProduct
+          .putIfAbsent(variant.productId, () => <ProductVariant>[])
+          .add(variant);
     }
 
     final products = results[2]
-        .map((row) => Product.fromJson(
-              _normaliseProduct(row),
-              variants: variantsByProduct[row['id']] ?? const <ProductVariant>[],
-            ))
+        .map(
+          (row) => Product.fromJson(
+            _normaliseProduct(row),
+            variants: variantsByProduct[row['id']] ?? const <ProductVariant>[],
+          ),
+        )
         .toList(growable: false);
 
     final catalog = Catalog(
       store: store,
-      categories: results[0].map(ProductCategory.fromJson).toList(growable: false),
+      categories: results[0]
+          .map(ProductCategory.fromJson)
+          .toList(growable: false),
       brands: results[1].map(Brand.fromJson).toList(growable: false),
       products: products,
-      deliveryLocations: results[4].map(DeliveryLocation.fromJson).toList(growable: false),
-      paymentMethods: results[5].map(StorePaymentMethod.fromJson).toList(growable: false),
+      deliveryLocations: results[4]
+          .map(DeliveryLocation.fromJson)
+          .toList(growable: false),
+      paymentMethods: results[5]
+          .map(StorePaymentMethod.fromJson)
+          .toList(growable: false),
       isLiveData: true,
     );
 
@@ -114,12 +143,16 @@ class RemoteCatalogRepository implements CatalogRepository {
   }
 
   Future<StoreInfo> _loadStore() async {
-    final rows = await _client.select('tenants', query: <String, String>{
-      'select': '*',
-      'slug': 'eq.${_client.tenantSlug}',
-      'limit': '1',
-    });
-    if (rows.isEmpty) throw const Failure(FailureKind.notFound, detail: 'tenant');
+    final rows = await _client.select(
+      'tenants',
+      query: <String, String>{
+        'select': '*',
+        'slug': 'eq.${_client.tenantSlug}',
+        'limit': '1',
+      },
+    );
+    if (rows.isEmpty)
+      throw const Failure(FailureKind.notFound, detail: 'tenant');
     return StoreInfo.fromJson(rows.first);
   }
 

@@ -9,7 +9,9 @@ import '../support/fixtures.dart';
 import '../support/harness.dart';
 
 void main() {
-  testWidgets('shows an empty state when nothing has been added', (tester) async {
+  testWidgets('shows an empty state when nothing has been added', (
+    tester,
+  ) async {
     await pumpScreen(tester, const CartScreen());
     await settle(tester);
 
@@ -20,9 +22,14 @@ void main() {
 
   testWidgets('lists the cart lines with their chosen options', (tester) async {
     final container = await pumpScreen(tester, const CartScreen());
-    container.read(cartProvider.notifier).add(
+    container
+        .read(cartProvider.notifier)
+        .add(
           Fixtures.pyjamaWithSizes,
-          variant: Fixtures.pyjamaWithSizes.findVariant(color: 'خمري غامق', size: 'L'),
+          variant: Fixtures.pyjamaWithSizes.findVariant(
+            color: 'خمري غامق',
+            size: 'L',
+          ),
         );
     await settle(tester);
 
@@ -32,10 +39,13 @@ void main() {
     expect(find.textContaining('L'), findsWidgets);
   });
 
-  testWidgets('shows the subtotal, the shop\'s delivery area and the total',
-      (tester) async {
+  testWidgets('shows the subtotal, the shop\'s delivery area and the total', (
+    tester,
+  ) async {
     final container = await pumpScreen(tester, const CartScreen());
-    container.read(cartProvider.notifier).add(Fixtures.shirtNoVariants, quantity: 2);
+    container
+        .read(cartProvider.notifier)
+        .add(Fixtures.shirtNoVariants, quantity: 2);
     await settle(tester);
 
     expect(find.text('المجموع الفرعي'), findsOneWidget);
@@ -46,7 +56,9 @@ void main() {
     expect(find.text('الإجمالي'), findsOneWidget);
   });
 
-  testWidgets('the stepper increases and decreases the quantity', (tester) async {
+  testWidgets('the stepper increases and decreases the quantity', (
+    tester,
+  ) async {
     final container = await pumpScreen(tester, const CartScreen());
     container.read(cartProvider.notifier).add(Fixtures.shirtNoVariants);
     await settle(tester);
@@ -66,9 +78,14 @@ void main() {
   testWidgets('the stepper refuses to exceed available stock', (tester) async {
     final container = await pumpScreen(tester, const CartScreen());
     // Only two of this variant exist.
-    container.read(cartProvider.notifier).add(
+    container
+        .read(cartProvider.notifier)
+        .add(
           Fixtures.pyjamaWithSizes,
-          variant: Fixtures.pyjamaWithSizes.findVariant(color: 'خمري غامق', size: 'L'),
+          variant: Fixtures.pyjamaWithSizes.findVariant(
+            color: 'خمري غامق',
+            size: 'L',
+          ),
           quantity: 2,
         );
     await settle(tester);
@@ -76,10 +93,16 @@ void main() {
     await tester.tap(find.byIcon(Icons.add_rounded));
     await tester.pump();
 
-    expect(container.read(cartCountProvider), 2, reason: 'capped at the stock level');
+    expect(
+      container.read(cartCountProvider),
+      2,
+      reason: 'capped at the stock level',
+    );
   });
 
-  testWidgets('removing a line offers an undo that restores it', (tester) async {
+  testWidgets('removing a line offers an undo that restores it', (
+    tester,
+  ) async {
     final container = await pumpScreen(tester, const CartScreen());
     container.read(cartProvider.notifier).add(Fixtures.shirtNoVariants);
     await settle(tester);
@@ -113,16 +136,24 @@ void main() {
     expect(container.read(cartProvider), isEmpty);
   });
 
-  testWidgets('two sizes of the same product show as two lines', (tester) async {
+  testWidgets('two sizes of the same product show as two lines', (
+    tester,
+  ) async {
     final container = await pumpScreen(tester, const CartScreen());
     final cart = container.read(cartProvider.notifier);
     cart.add(
       Fixtures.pyjamaWithSizes,
-      variant: Fixtures.pyjamaWithSizes.findVariant(color: 'خمري غامق', size: 'M'),
+      variant: Fixtures.pyjamaWithSizes.findVariant(
+        color: 'خمري غامق',
+        size: 'M',
+      ),
     );
     cart.add(
       Fixtures.pyjamaWithSizes,
-      variant: Fixtures.pyjamaWithSizes.findVariant(color: 'خمري غامق', size: 'L'),
+      variant: Fixtures.pyjamaWithSizes.findVariant(
+        color: 'خمري غامق',
+        size: 'L',
+      ),
     );
     await settle(tester);
 

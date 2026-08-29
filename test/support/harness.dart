@@ -19,8 +19,11 @@ import 'fixtures.dart';
 /// Every widget and repository test runs against this, so the suite does not
 /// depend on the live storefront being reachable.
 class FakeCatalogRepository implements CatalogRepository {
-  FakeCatalogRepository({Catalog? catalog, this.error, this.delay = Duration.zero})
-      : _catalog = catalog;
+  FakeCatalogRepository({
+    Catalog? catalog,
+    this.error,
+    this.delay = Duration.zero,
+  }) : _catalog = catalog;
 
   final Catalog? _catalog;
   final Object? error;
@@ -55,17 +58,18 @@ Future<ProviderContainer> pumpApp(
   final container = ProviderContainer(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
-      catalogRepositoryProvider.overrideWithValue(repository ?? FakeCatalogRepository()),
-      routerProvider.overrideWithValue(buildRouter(initialLocation: initialLocation)),
+      catalogRepositoryProvider.overrideWithValue(
+        repository ?? FakeCatalogRepository(),
+      ),
+      routerProvider.overrideWithValue(
+        buildRouter(initialLocation: initialLocation),
+      ),
     ],
   );
   addTearDown(container.dispose);
 
   await tester.pumpWidget(
-    UncontrolledProviderScope(
-      container: container,
-      child: const RawnqApp(),
-    ),
+    UncontrolledProviderScope(container: container, child: const RawnqApp()),
   );
   return container;
 }
@@ -84,7 +88,9 @@ Future<ProviderContainer> pumpScreen(
   final container = ProviderContainer(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
-      catalogRepositoryProvider.overrideWithValue(repository ?? FakeCatalogRepository()),
+      catalogRepositoryProvider.overrideWithValue(
+        repository ?? FakeCatalogRepository(),
+      ),
     ],
   );
   addTearDown(container.dispose);

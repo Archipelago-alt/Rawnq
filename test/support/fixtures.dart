@@ -153,17 +153,17 @@ class Fixtures {
   );
 
   static Catalog catalog({bool isLiveData = true}) => Catalog(
-        store: store,
-        categories: const <ProductCategory>[shirts, pyjamas],
-        brands: const <Brand>[lubna],
-        products: <Product>[
-          shirtNoVariants,
-          pyjamaWithSizes,
-          lingerieColorsOnly,
-          soldOut,
-        ],
-        deliveryLocations: const <DeliveryLocation>[gaza],
-        paymentMethods: const <StorePaymentMethod>[cashOnDelivery],
-        isLiveData: isLiveData,
-      );
+    store: store,
+    categories: const <ProductCategory>[shirts, pyjamas],
+    brands: const <Brand>[lubna],
+    products: <Product>[
+      shirtNoVariants,
+      pyjamaWithSizes,
+      lingerieColorsOnly,
+      soldOut,
+    ],
+    deliveryLocations: const <DeliveryLocation>[gaza],
+    paymentMethods: const <StorePaymentMethod>[cashOnDelivery],
+    isLiveData: isLiveData,
+  );
 }

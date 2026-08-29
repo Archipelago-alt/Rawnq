@@ -14,8 +14,9 @@ import '../support/fixtures.dart';
 import '../support/harness.dart';
 
 void main() {
-  testWidgets('the bottom bar moves between the five primary destinations',
-      (tester) async {
+  testWidgets('the bottom bar moves between the five primary destinations', (
+    tester,
+  ) async {
     await pumpApp(tester);
     await settle(tester);
 
@@ -38,8 +39,9 @@ void main() {
     expect(find.byType(CartScreen), findsOneWidget);
   });
 
-  testWidgets('home → category → product → cart is a complete shopping flow',
-      (tester) async {
+  testWidgets('home → category → product → cart is a complete shopping flow', (
+    tester,
+  ) async {
     final container = await pumpApp(tester);
     await settle(tester);
 
@@ -91,23 +93,25 @@ void main() {
     expect(currentLocation(container), '/categories');
   });
 
-  testWidgets('Android back from a non-home tab returns to home rather than exiting',
-      (tester) async {
-    final container = await pumpApp(tester);
-    await settle(tester);
+  testWidgets(
+    'Android back from a non-home tab returns to home rather than exiting',
+    (tester) async {
+      final container = await pumpApp(tester);
+      await settle(tester);
 
-    await tester.tap(find.text('المفضلة'));
-    await settle(tester);
-    expect(currentLocation(container), '/favorites');
+      await tester.tap(find.text('المفضلة'));
+      await settle(tester);
+      expect(currentLocation(container), '/favorites');
 
-    // Simulate the system back gesture.
-    final widgetsBinding = tester.binding;
-    await widgetsBinding.handlePopRoute();
-    await settle(tester);
+      // Simulate the system back gesture.
+      final widgetsBinding = tester.binding;
+      await widgetsBinding.handlePopRoute();
+      await settle(tester);
 
-    expect(currentLocation(container), '/');
-    expect(find.byType(HomeScreen), findsOneWidget);
-  });
+      expect(currentLocation(container), '/');
+      expect(find.byType(HomeScreen), findsOneWidget);
+    },
+  );
 
   testWidgets('searching navigates to a matching product', (tester) async {
     await pumpApp(tester);
@@ -134,15 +138,19 @@ void main() {
     final container = await pumpApp(tester);
     await settle(tester);
 
-    expect(find.descendant(of: find.byType(Badge), matching: find.text('1')),
-        findsNothing);
+    expect(
+      find.descendant(of: find.byType(Badge), matching: find.text('1')),
+      findsNothing,
+    );
 
     container.read(cartProvider.notifier).add(Fixtures.shirtNoVariants);
     await tester.pump();
 
     // NavigationDestination keeps both the selected and unselected icons in
     // the tree, so the badge legitimately appears more than once.
-    expect(find.descendant(of: find.byType(Badge), matching: find.text('1')),
-        findsWidgets);
+    expect(
+      find.descendant(of: find.byType(Badge), matching: find.text('1')),
+      findsWidgets,
+    );
   });
 }

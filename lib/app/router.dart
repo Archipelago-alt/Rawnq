@@ -55,7 +55,8 @@ GoRouter buildRouter({String initialLocation = Routes.home}) {
       // stays put while their content swaps.
       ShellRoute(
         navigatorKey: shellNavigatorKey,
-        builder: (context, state, child) => ShellScaffold(state: state, child: child),
+        builder: (context, state, child) =>
+            ShellScaffold(state: state, child: child),
         routes: <RouteBase>[
           GoRoute(
             path: Routes.home,
@@ -63,7 +64,8 @@ GoRouter buildRouter({String initialLocation = Routes.home}) {
           ),
           GoRoute(
             path: Routes.categories,
-            pageBuilder: (context, state) => _fade(state, const CategoriesScreen()),
+            pageBuilder: (context, state) =>
+                _fade(state, const CategoriesScreen()),
           ),
           GoRoute(
             path: Routes.search,
@@ -71,7 +73,8 @@ GoRouter buildRouter({String initialLocation = Routes.home}) {
           ),
           GoRoute(
             path: Routes.favorites,
-            pageBuilder: (context, state) => _fade(state, const FavoritesScreen()),
+            pageBuilder: (context, state) =>
+                _fade(state, const FavoritesScreen()),
           ),
           GoRoute(
             path: Routes.cart,
@@ -108,7 +111,8 @@ GoRouter buildRouter({String initialLocation = Routes.home}) {
       ),
       GoRoute(
         path: Routes.privacy,
-        builder: (context, state) => const PolicyScreen(kind: PolicyKind.privacy),
+        builder: (context, state) =>
+            const PolicyScreen(kind: PolicyKind.privacy),
       ),
       GoRoute(
         path: Routes.terms,

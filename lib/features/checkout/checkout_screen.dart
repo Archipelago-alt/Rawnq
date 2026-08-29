@@ -91,8 +91,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               textInputAction: TextInputAction.next,
               textCapitalization: TextCapitalization.words,
               decoration: InputDecoration(labelText: l10n.checkoutName),
-              validator: (value) =>
-                  CheckoutValidator.isValidName(value ?? '') ? null : l10n.checkoutErrorName,
+              validator: (value) => CheckoutValidator.isValidName(value ?? '')
+                  ? null
+                  : l10n.checkoutErrorName,
             ),
             const SizedBox(height: RawnqSpace.md),
             TextFormField(
@@ -123,7 +124,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               RadioGroup<String>(
                 groupValue: _delivery?.id,
                 onChanged: (value) => setState(() {
-                  _delivery = deliveries.where((o) => o.id == value).firstOrNull;
+                  _delivery = deliveries
+                      .where((o) => o.id == value)
+                      .firstOrNull;
                 }),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -194,10 +197,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             if (_delivery != null)
               _TotalRow(
                 label: l10n.cartDelivery,
-                value: _delivery!.isFree ? l10n.cartFreeDelivery : Money.format(fee),
+                value: _delivery!.isFree
+                    ? l10n.cartFreeDelivery
+                    : Money.format(fee),
               ),
             const SizedBox(height: RawnqSpace.sm),
-            _TotalRow(label: l10n.cartTotal, value: Money.format(total), emphasise: true),
+            _TotalRow(
+              label: l10n.cartTotal,
+              value: Money.format(total),
+              emphasise: true,
+            ),
 
             const SizedBox(height: RawnqSpace.xl),
             ElevatedButton.icon(
@@ -206,14 +215,21 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   ? const SizedBox(
                       width: 18,
                       height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
                     )
                   : const Icon(Icons.chat_rounded, size: 20),
-              label: Text(_submitting ? l10n.checkoutSending : l10n.checkoutSend),
+              label: Text(
+                _submitting ? l10n.checkoutSending : l10n.checkoutSend,
+              ),
             ),
             const SizedBox(height: RawnqSpace.md),
             OutlinedButton.icon(
-              onPressed: _submitting ? null : () => context.push(Routes.webCheckout),
+              onPressed: _submitting
+                  ? null
+                  : () => context.push(Routes.webCheckout),
               icon: const Icon(Icons.open_in_browser_rounded, size: 20),
               label: Text(l10n.checkoutOpenWebsite),
             ),
@@ -234,12 +250,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
     final delivery = _delivery;
     if (delivery == null) {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.checkoutErrorDelivery)));
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.checkoutErrorDelivery)),
+      );
       return;
     }
     final payment = _payment;
     if (payment == null) {
-      messenger.showSnackBar(SnackBar(content: Text(l10n.checkoutErrorPayment)));
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.checkoutErrorPayment)),
+      );
       return;
     }
     final whatsapp = catalog?.store.whatsappDigits;
@@ -283,26 +303,29 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   /// Derived from the clock only — it carries no personal data.
   String _buildReference() {
     final now = DateTime.now();
-    final stamp = now.millisecondsSinceEpoch.remainder(100000).toString().padLeft(5, '0');
+    final stamp = now.millisecondsSinceEpoch
+        .remainder(100000)
+        .toString()
+        .padLeft(5, '0');
     return 'R${now.year % 100}${now.month.toString().padLeft(2, '0')}$stamp';
   }
 
   OrderMessageLabels _labels(AppLocalizations l10n) => OrderMessageLabels(
-        header: l10n.whatsappOrderHeader,
-        items: l10n.whatsappOrderItems,
-        customer: l10n.whatsappOrderCustomer,
-        phone: l10n.whatsappOrderPhone,
-        area: l10n.whatsappOrderArea,
-        payment: l10n.whatsappOrderPayment,
-        notes: l10n.whatsappOrderNotes,
-        subtotal: l10n.whatsappOrderSubtotal,
-        deliveryFee: l10n.whatsappOrderDeliveryFee,
-        total: l10n.whatsappOrderTotal,
-        color: l10n.whatsappOrderColor,
-        size: l10n.whatsappOrderSize,
-        quantity: l10n.whatsappOrderQuantity,
-        free: l10n.cartFreeDelivery,
-      );
+    header: l10n.whatsappOrderHeader,
+    items: l10n.whatsappOrderItems,
+    customer: l10n.whatsappOrderCustomer,
+    phone: l10n.whatsappOrderPhone,
+    area: l10n.whatsappOrderArea,
+    payment: l10n.whatsappOrderPayment,
+    notes: l10n.whatsappOrderNotes,
+    subtotal: l10n.whatsappOrderSubtotal,
+    deliveryFee: l10n.whatsappOrderDeliveryFee,
+    total: l10n.whatsappOrderTotal,
+    color: l10n.whatsappOrderColor,
+    size: l10n.whatsappOrderSize,
+    quantity: l10n.whatsappOrderQuantity,
+    free: l10n.cartFreeDelivery,
+  );
 }
 
 class _SectionTitle extends StatelessWidget {
@@ -320,7 +343,11 @@ class _SectionTitle extends StatelessWidget {
 }
 
 class _TotalRow extends StatelessWidget {
-  const _TotalRow({required this.label, required this.value, this.emphasise = false});
+  const _TotalRow({
+    required this.label,
+    required this.value,
+    this.emphasise = false,
+  });
 
   final String label;
   final String value;
@@ -338,7 +365,9 @@ class _TotalRow extends StatelessWidget {
               label,
               style: emphasise
                   ? theme.textTheme.titleMedium
-                  : theme.textTheme.bodyMedium?.copyWith(color: RawnqColors.inkSoft),
+                  : theme.textTheme.bodyMedium?.copyWith(
+                      color: RawnqColors.inkSoft,
+                    ),
             ),
           ),
           Text(

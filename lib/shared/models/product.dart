@@ -30,7 +30,12 @@ class ProductVariant {
     return ProductVariant(
       id: json['id'] as String? ?? '',
       productId: (json['productId'] ?? json['product_id'] ?? '') as String,
-      name: (json['name'] ?? json['variant_name_ar'] ?? json['variant_name'] ?? '') as String,
+      name:
+          (json['name'] ??
+                  json['variant_name_ar'] ??
+                  json['variant_name'] ??
+                  '')
+              as String,
       price: _toDouble(json['price'] ?? json['price_1']),
       stock: _toDouble(json['stock'] ?? json['stock_quantity']),
       color: attr('color'),
@@ -38,7 +43,8 @@ class ProductVariant {
       size: attr('size'),
       material: attr('material'),
       imageUrl: _text(json['imageUrl'] ?? json['image_url']),
-      sortOrder: (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
+      sortOrder:
+          (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
     );
   }
 
@@ -100,9 +106,9 @@ class Product {
     final embedded = json['variants'];
     final resolvedVariants = embedded is List
         ? embedded
-            .whereType<Map<String, dynamic>>()
-            .map(ProductVariant.fromJson)
-            .toList(growable: false)
+              .whereType<Map<String, dynamic>>()
+              .map(ProductVariant.fromJson)
+              .toList(growable: false)
         : variants;
 
     return Product(
@@ -112,19 +118,31 @@ class Product {
       categoryId: _text(json['categoryId'] ?? json['category_id']),
       brandId: _text(json['brandId'] ?? json['brand_id']),
       description: _text(json['description'] ?? json['description_ar']),
-      compareAtPrice: json['compareAtPrice'] == null && json['compare_at_price'] == null
+      compareAtPrice:
+          json['compareAtPrice'] == null && json['compare_at_price'] == null
           ? null
           : _toDouble(json['compareAtPrice'] ?? json['compare_at_price']),
-      discountPercentage:
-          _toDouble(json['discountPercentage'] ?? json['discount_percentage_tier1']),
-      showDiscount: json['showDiscount'] as bool? ?? json['show_discount'] as bool? ?? false,
+      discountPercentage: _toDouble(
+        json['discountPercentage'] ?? json['discount_percentage_tier1'],
+      ),
+      showDiscount:
+          json['showDiscount'] as bool? ??
+          json['show_discount'] as bool? ??
+          false,
       stock: _toDouble(json['stock'] ?? json['stock_quantity']),
       images: _images(json),
-      labels: (json['labels'] as List?)?.whereType<String>().toList(growable: false) ??
+      labels:
+          (json['labels'] as List?)?.whereType<String>().toList(
+            growable: false,
+          ) ??
           const <String>[],
-      isFeatured: json['isFeatured'] as bool? ?? json['is_featured'] as bool? ?? false,
-      sortOrder: (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
-      createdAt: DateTime.tryParse((json['createdAt'] ?? json['created_at'] ?? '') as String? ?? ''),
+      isFeatured:
+          json['isFeatured'] as bool? ?? json['is_featured'] as bool? ?? false,
+      sortOrder:
+          (json['sortOrder'] ?? json['sort_order'] as num?)?.toInt() ?? 0,
+      createdAt: DateTime.tryParse(
+        (json['createdAt'] ?? json['created_at'] ?? '') as String? ?? '',
+      ),
       variants: resolvedVariants,
     );
   }
@@ -240,7 +258,10 @@ class Product {
   static List<String> _images(Map<String, dynamic> json) {
     final direct = json['images'];
     if (direct is List) {
-      final list = direct.whereType<String>().where((s) => s.trim().isNotEmpty).toList();
+      final list = direct
+          .whereType<String>()
+          .where((s) => s.trim().isNotEmpty)
+          .toList();
       if (list.isNotEmpty) return List<String>.unmodifiable(list);
     }
     // The live table stores images in flat `image_url_1` … `image_url_10`

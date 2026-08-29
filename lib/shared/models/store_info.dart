@@ -28,33 +28,44 @@ class StoreInfo {
   });
 
   factory StoreInfo.fromJson(Map<String, dynamic> json) => StoreInfo(
-        id: json['id'] as String? ?? '',
-        slug: json['slug'] as String? ?? '',
-        label: _text(json['label'] ?? json['store_label']) ?? 'رونق | RAWNQ',
-        brandColor: _text(json['brandColor'] ?? json['brand_color']) ?? '#7c3918',
-        currency: _text(json['currency']) ?? 'ILS',
-        slogan: _text(json['slogan'] ?? json['store_slogan_ar'] ?? json['store_slogan']),
-        logoUrl: _text(json['logoUrl'] ?? json['store_logo']),
-        country: _text(json['country']),
-        whatsapp: _text(json['whatsapp'] ?? json['store_whatsapp']),
-        email: _text(json['email'] ?? json['store_email']),
-        instagram: _text(json['instagram'] ?? _social(json, 'instagram')),
-        facebook: _text(json['facebook'] ?? _social(json, 'facebook')),
-        tiktok: _text(json['tiktok'] ?? _social(json, 'tiktok')),
-        showStock: json['showStock'] as bool? ?? json['show_stock_to_mobile'] as bool? ?? false,
-        hideOutOfStock: json['hideOutOfStock'] as bool? ??
-            json['hide_out_of_stock_when_stock_hidden'] as bool? ??
-            false,
-        taxRate: (json['taxRate'] ?? json['tax_rate'] as num?)?.toDouble() ?? 0,
-        pricesIncludeTax:
-            json['pricesIncludeTax'] as bool? ?? json['prices_include_tax'] as bool? ?? true,
-        privacyPolicy: _text(json['privacyPolicy'] ?? json['privacy_policy_ar']),
-        termsConditions: _text(json['termsConditions'] ?? json['terms_conditions_ar']),
-        aboutUs: _text(json['aboutUs'] ?? json['about_us_ar']),
-        showBringusBranding: json['showBringusBranding'] as bool? ??
-            json['show_bringus_branding'] as bool? ??
-            true,
-      );
+    id: json['id'] as String? ?? '',
+    slug: json['slug'] as String? ?? '',
+    label: _text(json['label'] ?? json['store_label']) ?? 'رونق | RAWNQ',
+    brandColor: _text(json['brandColor'] ?? json['brand_color']) ?? '#7c3918',
+    currency: _text(json['currency']) ?? 'ILS',
+    slogan: _text(
+      json['slogan'] ?? json['store_slogan_ar'] ?? json['store_slogan'],
+    ),
+    logoUrl: _text(json['logoUrl'] ?? json['store_logo']),
+    country: _text(json['country']),
+    whatsapp: _text(json['whatsapp'] ?? json['store_whatsapp']),
+    email: _text(json['email'] ?? json['store_email']),
+    instagram: _text(json['instagram'] ?? _social(json, 'instagram')),
+    facebook: _text(json['facebook'] ?? _social(json, 'facebook')),
+    tiktok: _text(json['tiktok'] ?? _social(json, 'tiktok')),
+    showStock:
+        json['showStock'] as bool? ??
+        json['show_stock_to_mobile'] as bool? ??
+        false,
+    hideOutOfStock:
+        json['hideOutOfStock'] as bool? ??
+        json['hide_out_of_stock_when_stock_hidden'] as bool? ??
+        false,
+    taxRate: (json['taxRate'] ?? json['tax_rate'] as num?)?.toDouble() ?? 0,
+    pricesIncludeTax:
+        json['pricesIncludeTax'] as bool? ??
+        json['prices_include_tax'] as bool? ??
+        true,
+    privacyPolicy: _text(json['privacyPolicy'] ?? json['privacy_policy_ar']),
+    termsConditions: _text(
+      json['termsConditions'] ?? json['terms_conditions_ar'],
+    ),
+    aboutUs: _text(json['aboutUs'] ?? json['about_us_ar']),
+    showBringusBranding:
+        json['showBringusBranding'] as bool? ??
+        json['show_bringus_branding'] as bool? ??
+        true,
+  );
 
   final String id;
   final String slug;
