@@ -108,7 +108,9 @@ void main() {
     await settle(tester);
 
     await tester.tap(find.byIcon(Icons.delete_outline_rounded));
-    await tester.pump();
+    // The snack bar ignores pointers while it animates in, so let it finish
+    // before reaching for the undo action.
+    await tester.pumpAndSettle();
 
     expect(container.read(cartProvider), isEmpty);
     expect(find.text('تمت إزالة المنتج'), findsOneWidget);

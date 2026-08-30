@@ -57,34 +57,64 @@ class ProductImage extends StatelessWidget {
 class _ImageFallback extends StatelessWidget {
   const _ImageFallback();
 
+  /// Below this, only the icon fits: category circles are 62px and brand
+  /// logos 44px, and a caption there overflows the box.
+  static const double _captionThreshold = 96;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return ColoredBox(
       color: RawnqColors.cream,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            const Icon(
-              Icons.checkroom_outlined,
-              color: RawnqColors.inkSoft,
-              size: 28,
-            ),
-            const SizedBox(height: RawnqSpace.xs),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.sm),
-              child: Text(
-                l10n.stateImageUnavailable,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 11,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final compact =
+              constraints.maxHeight < _captionThreshold ||
+              constraints.maxWidth < _captionThreshold;
+
+          if (compact) {
+            // The caption is dropped visually but kept for screen readers.
+            return Semantics(
+              label: l10n.stateImageUnavailable,
+              child: const Center(
+                child: Icon(
+                  Icons.checkroom_outlined,
                   color: RawnqColors.inkSoft,
+                  size: 20,
                 ),
               ),
+            );
+          }
+
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Icon(
+                  Icons.checkroom_outlined,
+                  color: RawnqColors.inkSoft,
+                  size: 28,
+                ),
+                const SizedBox(height: RawnqSpace.xs),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: RawnqSpace.sm,
+                  ),
+                  child: Text(
+                    l10n.stateImageUnavailable,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: RawnqColors.inkSoft,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

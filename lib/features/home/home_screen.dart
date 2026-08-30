@@ -34,18 +34,19 @@ class HomeScreen extends ConsumerWidget {
                   children: <Widget>[
                     const ShimmerBox(height: 18, width: 140),
                     const SizedBox(height: RawnqSpace.lg),
+                    // Scrolls like the real category strip: a fixed Row of
+                    // four chips is wider than a small phone.
                     SizedBox(
                       height: 108,
-                      child: Row(
-                        children: List<Widget>.generate(
-                          4,
-                          (_) => const Padding(
-                            padding: EdgeInsetsDirectional.only(
-                              start: RawnqSpace.md,
-                            ),
-                            child: ShimmerBox(width: 88, height: 108),
-                          ),
-                        ),
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        itemCount: 4,
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(width: RawnqSpace.md),
+                        itemBuilder: (_, __) =>
+                            const ShimmerBox(width: 88, height: 108),
                       ),
                     ),
                   ],

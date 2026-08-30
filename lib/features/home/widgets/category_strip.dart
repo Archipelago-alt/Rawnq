@@ -41,45 +41,50 @@ class _CategoryChip extends StatelessWidget {
       button: true,
       label: category.name,
       excludeSemantics: true,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(RawnqSpace.radiusMd),
-        onTap: () => context.push(Routes.categoryPath(category.id)),
-        child: SizedBox(
-          width: 92,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                width: 78,
-                height: 78,
-                decoration: const BoxDecoration(
-                  color: RawnqColors.cream,
-                  shape: BoxShape.circle,
-                  boxShadow: kCardShadow,
-                ),
-                padding: const EdgeInsets.all(RawnqSpace.sm),
-                child: ClipOval(
-                  child: ProductImage(
-                    url: category.imageUrl,
-                    fit: BoxFit.contain,
-                    decodeWidth: 160,
-                    borderRadius: BorderRadius.zero,
+      // Carries its own Material so the ink response works wherever the strip
+      // is used, not only under a Scaffold.
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(RawnqSpace.radiusMd),
+          onTap: () => context.push(Routes.categoryPath(category.id)),
+          child: SizedBox(
+            width: 92,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  width: 78,
+                  height: 78,
+                  decoration: const BoxDecoration(
+                    color: RawnqColors.cream,
+                    shape: BoxShape.circle,
+                    boxShadow: kCardShadow,
+                  ),
+                  padding: const EdgeInsets.all(RawnqSpace.sm),
+                  child: ClipOval(
+                    child: ProductImage(
+                      url: category.imageUrl,
+                      fit: BoxFit.contain,
+                      decodeWidth: 160,
+                      borderRadius: BorderRadius.zero,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: RawnqSpace.sm),
-              Text(
-                category.name,
-                maxLines: 2,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  height: 1.3,
+                const SizedBox(height: RawnqSpace.sm),
+                Text(
+                  category.name,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    height: 1.3,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

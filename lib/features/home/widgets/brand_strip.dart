@@ -27,45 +27,50 @@ class BrandStrip extends StatelessWidget {
             button: true,
             label: brand.name,
             excludeSemantics: true,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(RawnqSpace.radiusMd),
-              onTap: () => context.push(Routes.brandPath(brand.id)),
-              child: Container(
-                width: 132,
-                padding: const EdgeInsets.all(RawnqSpace.md),
-                decoration: BoxDecoration(
-                  color: RawnqColors.surface,
-                  borderRadius: BorderRadius.circular(RawnqSpace.radiusMd),
-                  border: Border.all(color: RawnqColors.line),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    SizedBox(
-                      width: 44,
-                      height: 44,
-                      child: ProductImage(
-                        url: brand.logoUrl,
-                        fit: BoxFit.contain,
-                        decodeWidth: 120,
-                        borderRadius: BorderRadius.circular(
-                          RawnqSpace.radiusSm,
+            // Carries its own Material so the ink response works wherever the
+            // strip is used, not only under a Scaffold.
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(RawnqSpace.radiusMd),
+                onTap: () => context.push(Routes.brandPath(brand.id)),
+                child: Container(
+                  width: 132,
+                  padding: const EdgeInsets.all(RawnqSpace.md),
+                  decoration: BoxDecoration(
+                    color: RawnqColors.surface,
+                    borderRadius: BorderRadius.circular(RawnqSpace.radiusMd),
+                    border: Border.all(color: RawnqColors.line),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 44,
+                        height: 44,
+                        child: ProductImage(
+                          url: brand.logoUrl,
+                          fit: BoxFit.contain,
+                          decodeWidth: 120,
+                          borderRadius: BorderRadius.circular(
+                            RawnqSpace.radiusSm,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: RawnqSpace.sm),
-                    Expanded(
-                      child: Text(
-                        brand.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          height: 1.3,
+                      const SizedBox(width: RawnqSpace.sm),
+                      Expanded(
+                        child: Text(
+                          brand.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            height: 1.3,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

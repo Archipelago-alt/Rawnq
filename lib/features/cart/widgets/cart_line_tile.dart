@@ -65,15 +65,23 @@ class CartLineTile extends ConsumerWidget {
                 ],
                 const SizedBox(height: RawnqSpace.sm),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      Money.format(item.lineTotal),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w800,
-                        color: RawnqColors.brown,
+                    // The stepper has a fixed width, so the price yields
+                    // first: a long total at a large text scale would
+                    // otherwise overflow the narrow remaining column.
+                    Flexible(
+                      child: Text(
+                        Money.format(item.lineTotal),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: RawnqColors.brown,
+                        ),
                       ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: RawnqSpace.sm),
                     _QuantityStepper(item: item),
                   ],
                 ),

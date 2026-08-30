@@ -10,8 +10,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// leave the value null, and the UI simply shows no banner.
 final connectivityProvider = StreamProvider<bool>((ref) async* {
   final connectivity = Connectivity();
-  yield _isOnline(await connectivity.checkConnectivity());
-  yield* connectivity.onConnectivityChanged.map(_isOnline);
+  try {
+    yield _isOnline(await connectivity.checkConnectivity());
+  } on Exception {
+    // No platform implementation (widget tests, unsupported host). Leaving the
+    // stream empty keeps the value unknown rather than raising an error the
+    // caller would have to handle.
+    return;
+  }
+  yield* connectivity.onConnectivityChanged
+      .map(_isOnline)
+      .handleError((Object _) {});
 });
 
 /// True when at least one interface is up.
