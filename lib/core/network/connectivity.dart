@@ -9,6 +9,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// online. Errors here (for example, no platform implementation under test)
 /// leave the value null, and the UI simply shows no banner.
 final connectivityProvider = StreamProvider<bool>((ref) async* {
+  // Kept alive so the platform subscription is not torn down and rebuilt on
+  // every navigation; Riverpod 3 auto-disposes by default.
+  ref.keepAlive();
   final connectivity = Connectivity();
   try {
     yield _isOnline(await connectivity.checkConnectivity());

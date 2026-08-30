@@ -139,6 +139,27 @@ Future<void> settle(WidgetTester tester) async {
   }
 }
 
+/// Scrolls the primary scroll view until [finder] has been built and is
+/// visible.
+///
+/// The home screen is a lazy CustomScrollView, so widgets below the fold are
+/// not in the tree at all until they are scrolled towards. `find.byType`
+/// reports zero matches for content a shopper would simply scroll to.
+Future<void> scrollTo(
+  WidgetTester tester,
+  Finder finder, {
+  double delta = 300,
+  int maxScrolls = 60,
+}) async {
+  await tester.scrollUntilVisible(
+    finder,
+    delta,
+    scrollable: find.byType(Scrollable).first,
+    maxScrolls: maxScrolls,
+  );
+  await tester.pumpAndSettle();
+}
+
 /// Scrolls [finder] into view, then taps it.
 ///
 /// Product detail is a long scroll on a phone: the option selectors sit below

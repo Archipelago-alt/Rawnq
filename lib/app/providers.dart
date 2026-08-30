@@ -31,9 +31,23 @@ final catalogRepositoryProvider = Provider<CatalogRepository>((ref) {
 
 /// The whole storefront. Every screen reads from this one future.
 final catalogProvider = FutureProvider<Catalog>((ref) async {
+  // Riverpod 3 auto-disposes by default. The catalogue is shared by every
+  // screen, so without this it is torn down and refetched each time the last
+  // screen watching it is popped -- and an in-flight load is discarded
+  // outright, leaving the provider stuck in a loading state.
+  ref.keepAlive();
   final repository = ref.watch(catalogRepositoryProvider);
   return repository.loadCatalog();
-});
+}, retry: _noAutomaticRetry);
+
+/// Disables Riverpod 3's automatic retry-with-backoff.
+///
+/// While it retries, a failed provider stays in the loading state and carries
+/// the error alongside it, so the UI shows a skeleton rather than the offline
+/// state. A shopper with no connection would wait on a spinner indefinitely.
+/// Failing fast is better here: the error view offers an explicit retry, so
+/// the shopper decides when to try again.
+Duration? _noAutomaticRetry(int retryCount, Object error) => null;
 
 /// Pull-to-refresh entry point, called from widgets.
 Future<void> refreshCatalog(WidgetRef ref) async {

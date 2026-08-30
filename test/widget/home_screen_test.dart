@@ -21,7 +21,13 @@ void main() {
     expect(find.text('رونق | RAWNQ'), findsWidgets);
     expect(find.text('لأنكِ تستحقين الأجمل'), findsOneWidget);
     expect(find.byType(CategoryStrip), findsOneWidget);
+
+    // Brands and products sit below the fold on a phone, so reach them the
+    // way a shopper would.
+    await scrollTo(tester, find.byType(BrandStrip));
     expect(find.byType(BrandStrip), findsOneWidget);
+
+    await scrollTo(tester, find.byType(ProductCard).first);
     expect(find.byType(ProductCard), findsWidgets);
   });
 
@@ -49,6 +55,8 @@ void main() {
     await tester.pump(const Duration(seconds: 3));
     await settle(tester);
 
+    expect(find.byType(ProductCardSkeleton), findsNothing);
+    await scrollTo(tester, find.byType(ProductCard).first);
     expect(find.byType(ProductCard), findsWidgets);
   });
 
