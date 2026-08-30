@@ -18,9 +18,11 @@ Arabic-first, fully right-to-left, Android-primary with iOS supported.
 - [Running](#running)
 - [Building](#building)
 - [Testing](#testing)
+- [iOS status](#ios-status)
 - [Branding assets](#branding-assets)
 - [Application identifiers](#application-identifiers)
 - [Limitations and future work](#limitations-and-future-work)
+- [Merge readiness](#merge-readiness)
 - [Contributing](#contributing)
 
 ## What this is
@@ -284,14 +286,79 @@ keystore — see [Building](#building).
 
 ### Verified status
 
-Run locally against Flutter 3.47.2 / Dart 3.13.2:
+All results below are for commit **`5baba9d`**, the head of
+`feature/flutter-shopping-app`.
 
-| Check | Result |
+| Check | Where | Result |
+| --- | --- | --- |
+| `dart format --set-exit-if-changed` | local + CI | clean, 67 files |
+| `flutter analyze` | local + CI | **No issues found** — 0 errors, 0 warnings, 0 infos |
+| `flutter test` | local + CI | **122 passed, 0 failed** |
+| `flutter build apk --debug` | CI | success |
+| `flutter build apk --release` | CI | success |
+| Install and run on a physical Android device | maintainer | **passed** (reported by the maintainer, not reproduced in CI) |
+
+Toolchain: Flutter 3.47.2 (stable), Dart 3.13.2 — the same version CI pins.
+
+CI runs for that commit:
+[push](https://github.com/Archipelago-alt/Rawnq/actions/runs/33305252190) ·
+[pull_request](https://github.com/Archipelago-alt/Rawnq/actions/runs/33305253779).
+Both are green on both jobs.
+
+#### What the tested APK contained
+
+The CI workflow passes **no `--dart-define` values and reads no secrets**, so
+`AppConfig.hasRemoteApi` is false and the build falls back to
+`LocalCatalogRepository`. The APK that was installed and tested therefore ran
+on the **bundled catalogue snapshot** (`assets/data/catalog_snapshot.json`,
+captured 2026-08-29), not on the live storefront API.
+
+That is visible in the app itself: every catalogue screen shows the banner
+`بيانات محلية للتجربة — لُقطة من المتجر بتاريخ …`. A build wired to the live
+API shows no such banner. **No build produced so far has exercised the live
+API path**; `RemoteCatalogRepository` is covered by unit tests against a fake
+Dio adapter only.
+
+#### Not yet verified
+
+- **iOS has never been built.** No macOS or Xcode was available, so the iOS
+  project is generated-and-configured but entirely uncompiled. See
+  [iOS status](#ios-status).
+- The live-API path has not been run against the real storefront from inside
+  the app.
+- No release signing has been exercised.
+
+## iOS status
+
+Both platform projects are committed: `android/` (47 tracked files) and
+`ios/` (48 tracked files).
+
+**Android is verified.** It builds in CI and has been installed and run on a
+physical device.
+
+**iOS is configured but unverified.** No macOS or Xcode was available at any
+point, so nothing in the iOS project has ever been compiled. Specifically,
+none of the following has been exercised:
+
+| Item | State |
 | --- | --- |
-| `dart format --set-exit-if-changed` | clean |
-| `flutter analyze` | **No issues found** |
-| `flutter test` | **122 passed, 0 failed** |
-| `flutter build apk` | not run locally — no JDK/Android SDK on the dev machine; CI builds it |
+| Compilation (`flutter build ios` / `ipa`) | **Never run** |
+| CocoaPods (`pod install`) | **Never run**; `ios/Podfile` is not present and is generated on the first iOS build |
+| Bundle identifier `com.rawnq.gaza` | Written into `project.pbxproj`, never validated by a build |
+| `CFBundleDisplayName` = `RAWNQ`, `CFBundleDevelopmentRegion` = `ar`, `CFBundleLocalizations` = `[ar]` | Written into `Info.plist`, not verified on device |
+| `LSApplicationQueriesSchemes` (`https`, `tel`, `whatsapp`) | Written, not verified — this is what `url_launcher` needs for the WhatsApp and call actions |
+| Launcher icons and native splash | Generated into the asset catalogues, never rendered by Xcode |
+| RTL layout and the Tajawal font on iOS | Never seen running |
+| `webview_flutter` (WKWebView) checkout hand-off | Never run |
+
+Treat iOS as **unproven** until someone runs, on a Mac:
+
+```bash
+flutter pub get && cd ios && pod install && cd .. && flutter build ios --no-codesign
+```
+
+Expect to fix things there. Podfile generation and CocoaPods resolution in
+particular have never been attempted for this dependency set.
 
 ## Branding assets
 
@@ -374,6 +441,40 @@ and price formatting, Arabic search behaviour, navigation structure.
 - Product images always require the network on first view.
 - Privacy policy and terms are empty upstream; those screens show an honest
   empty state and link to the website, rather than inventing legal text.
+
+## Merge readiness
+
+These two lists are deliberately separate: what stands in the way of merging
+this branch, and what would be needed before the app reaches real shoppers.
+
+### Blocking the merge
+
+Nothing in the automated checks. As of `5baba9d`, format, analyze, tests and
+both Android builds pass, and Android has been verified on a device.
+
+What a reviewer should still decide, because these are judgement calls rather
+than defects:
+
+| # | Decision | Why it needs a human |
+| --- | --- | --- |
+| 1 | Confirm the application ID `com.rawnq.gaza` | It is a **placeholder**; it could not be confirmed against any published RAWNQ app, and it can never be changed after a Play Store release. |
+| 2 | Accept that checkout hands off rather than submitting orders | The alternative writes to the BringUs production database with the platform's key. Deliberate; see [Where the data comes from](#where-the-data-comes-from). |
+| 3 | Accept iOS as unbuilt | See [iOS status](#ios-status). Merging is still reasonable if iOS is treated as work in progress. |
+| 4 | Accept the base branch | `main` was created solely to give this PR a target; the repository was empty. |
+
+### Required before a public release
+
+None of these blocks the merge, and none is a code defect.
+
+| # | Requirement |
+| --- | --- |
+| 1 | **A real release keystore.** Every APK so far is signed with the **debug key** and must not be distributed. |
+| 2 | **A decision on live data.** Builds currently ship the bundled snapshot. Supplying `RAWNQ_SUPABASE_URL` / `RAWNQ_SUPABASE_ANON_KEY` switches to live — but that key belongs to the BringUs platform, so **ask the platform operator before shipping a build that carries it**. |
+| 3 | **Exercise the live-API path once**, on a device. No build has yet run against the real storefront. |
+| 4 | **Build and test on iOS**, if iOS is in scope. |
+| 5 | **Privacy policy and terms.** Both are empty on the live tenant; app stores require a privacy policy. |
+| 6 | **Confirm WhatsApp ordering with the shop** — that `+970593208117` is the right destination and the message format suits how they work. |
+| 7 | Store listing assets, age rating, and a data-safety declaration. |
 
 ## Contributing
 
