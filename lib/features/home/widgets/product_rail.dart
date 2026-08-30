@@ -20,7 +20,7 @@ class ProductRail extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.lg),
         itemCount: products.length,
-        separatorBuilder: (_, __) => const SizedBox(width: RawnqSpace.md),
+        separatorBuilder: (_, _) => const SizedBox(width: RawnqSpace.md),
         itemBuilder: (context, index) {
           final product = products[index];
           return SizedBox(
@@ -50,8 +50,8 @@ class ProductRailSkeleton extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.lg),
           itemCount: 3,
-          separatorBuilder: (_, __) => const SizedBox(width: RawnqSpace.md),
-          itemBuilder: (context, __) =>
+          separatorBuilder: (_, _) => const SizedBox(width: RawnqSpace.md),
+          itemBuilder: (context, _) =>
               const SizedBox(width: 168, child: ProductCardSkeleton()),
         ),
       ),
@@ -61,8 +61,13 @@ class ProductRailSkeleton extends StatelessWidget {
 
 /// Card width plus its text block, scaled with the user's text size so long
 /// Arabic names never clip.
+///
+/// The allowance is deliberately a little larger than the measured text block:
+/// sizing it exactly leaves no room for font-metric rounding, which shows up
+/// as a few pixels of overflow.
 double _railHeight(BuildContext context) {
   const cardWidth = 168.0;
+  const textBlock = 100.0;
   final textScale = MediaQuery.textScalerOf(context).scale(14) / 14;
-  return cardWidth + (86 * textScale);
+  return cardWidth + (textBlock * textScale);
 }

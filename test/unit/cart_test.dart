@@ -211,11 +211,11 @@ void main() {
 
     test('the variant price wins over the product price', () async {
       final container = await makeContainer();
-      final product = Product(
+      const product = Product(
         id: 'p',
         name: 'x',
         price: 200,
-        variants: const <ProductVariant>[
+        variants: <ProductVariant>[
           ProductVariant(
             id: 'v',
             productId: 'p',

@@ -28,9 +28,8 @@ class CategoriesScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(RawnqSpace.lg),
             sliver: SliverList.separated(
               itemCount: 4,
-              separatorBuilder: (_, __) =>
-                  const SizedBox(height: RawnqSpace.lg),
-              itemBuilder: (_, __) => const Shimmer(
+              separatorBuilder: (_, _) => const SizedBox(height: RawnqSpace.lg),
+              itemBuilder: (_, _) => const Shimmer(
                 child: ShimmerBox(
                   height: 116,
                   borderRadius: BorderRadius.all(
@@ -60,7 +59,7 @@ class CategoriesScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(RawnqSpace.lg),
               sliver: SliverList.separated(
                 itemCount: catalog.categories.length,
-                separatorBuilder: (_, __) =>
+                separatorBuilder: (_, _) =>
                     const SizedBox(height: RawnqSpace.lg),
                 itemBuilder: (context, index) {
                   final category = catalog.categories[index];

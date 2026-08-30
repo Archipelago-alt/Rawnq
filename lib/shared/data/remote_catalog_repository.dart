@@ -14,10 +14,9 @@ import 'catalog_repository.dart';
 /// Endpoint and column choices are documented in `docs/api-integration.md`.
 class RemoteCatalogRepository implements CatalogRepository {
   RemoteCatalogRepository({
-    required ApiClient client,
-    Duration cacheTtl = const Duration(minutes: 10),
-  }) : _client = client,
-       _cacheTtl = cacheTtl;
+    required this._client,
+    this._cacheTtl = const Duration(minutes: 10),
+  });
 
   final ApiClient _client;
   final Duration _cacheTtl;
@@ -151,8 +150,9 @@ class RemoteCatalogRepository implements CatalogRepository {
         'limit': '1',
       },
     );
-    if (rows.isEmpty)
+    if (rows.isEmpty) {
       throw const Failure(FailureKind.notFound, detail: 'tenant');
+    }
     return StoreInfo.fromJson(rows.first);
   }
 

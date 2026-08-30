@@ -104,8 +104,9 @@ class ProductFilter {
   bool _matchesQuery(Product product) {
     if (ArabicText.matches(product.name, query)) return true;
     final description = product.description;
-    if (description != null && ArabicText.matches(description, query))
+    if (description != null && ArabicText.matches(description, query)) {
       return true;
+    }
     for (final variant in product.variants) {
       if (ArabicText.matches(variant.name, query)) return true;
       final color = variant.color;

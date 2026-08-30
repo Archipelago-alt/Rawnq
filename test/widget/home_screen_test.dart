@@ -27,7 +27,7 @@ void main() {
     await scrollTo(tester, find.byType(BrandStrip));
     expect(find.byType(BrandStrip), findsOneWidget);
 
-    await scrollTo(tester, find.byType(ProductCard).first);
+    await scrollTo(tester, find.byType(ProductCard));
     expect(find.byType(ProductCard), findsWidgets);
   });
 
@@ -56,7 +56,7 @@ void main() {
     await settle(tester);
 
     expect(find.byType(ProductCardSkeleton), findsNothing);
-    await scrollTo(tester, find.byType(ProductCard).first);
+    await scrollTo(tester, find.byType(ProductCard));
     expect(find.byType(ProductCard), findsWidgets);
   });
 

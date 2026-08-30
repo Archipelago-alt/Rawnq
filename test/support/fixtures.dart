@@ -86,15 +86,15 @@ class Fixtures {
   );
 
   /// A product with colours but no sizes — only the colour is mandatory.
-  static final Product lingerieColorsOnly = Product(
+  static const Product lingerieColorsOnly = Product(
     id: 'p-lingerie',
     name: 'طقم لانجري صيفي فاخر',
     price: 40,
     categoryId: 'cat-lingerie',
     stock: 8,
-    images: const <String>['https://cdn.example/lingerie-1.webp'],
+    images: <String>['https://cdn.example/lingerie-1.webp'],
     sortOrder: 2,
-    variants: const <ProductVariant>[
+    variants: <ProductVariant>[
       ProductVariant(
         id: 'v-black',
         productId: 'p-lingerie',
@@ -130,13 +130,13 @@ class Fixtures {
   );
 
   /// Sold out everywhere.
-  static final Product soldOut = Product(
+  static const Product soldOut = Product(
     id: 'p-soldout',
     name: 'فستان سهرة',
     price: 90,
     categoryId: 'cat-dresses',
     stock: 0,
-    images: const <String>['https://cdn.example/dress-1.webp'],
+    images: <String>['https://cdn.example/dress-1.webp'],
     sortOrder: 4,
   );
 

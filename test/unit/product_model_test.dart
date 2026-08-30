@@ -8,7 +8,7 @@ void main() {
     test(
       'reads images from the flat image_url_N columns the API actually uses',
       () {
-        final product = Product.fromJson(<String, dynamic>{
+        final product = Product.fromJson(const <String, dynamic>{
           'id': 'p1',
           'name': 'قميص',
           'price': 80,
@@ -28,7 +28,7 @@ void main() {
     );
 
     test('prefers the images array when the API supplies one', () {
-      final product = Product.fromJson(<String, dynamic>{
+      final product = Product.fromJson(const <String, dynamic>{
         'id': 'p1',
         'name': 'قميص',
         'price': 80,
@@ -40,7 +40,7 @@ void main() {
     });
 
     test('falls back to price_1 when price is absent', () {
-      final product = Product.fromJson(<String, dynamic>{
+      final product = Product.fromJson(const <String, dynamic>{
         'id': 'p1',
         'name': 'قميص',
         'price_1': 70,
@@ -51,9 +51,9 @@ void main() {
 
     test('parses variant options out of the attributes map', () {
       final product = Product.fromJson(
-        <String, dynamic>{'id': 'p1', 'name': 'بجامة', 'price_1': 100},
+        const <String, dynamic>{'id': 'p1', 'name': 'بجامة', 'price_1': 100},
         variants: <ProductVariant>[
-          ProductVariant.fromJson(<String, dynamic>{
+          ProductVariant.fromJson(const <String, dynamic>{
             'id': 'v1',
             'product_id': 'p1',
             'variant_name': 'اسود-لارج',
@@ -97,12 +97,12 @@ void main() {
     });
 
     test('a variant product is unavailable when every variant is empty', () {
-      final product = Product(
+      const product = Product(
         id: 'p',
         name: 'x',
         price: 10,
         stock: 99, // product-level stock must not mask empty variants
-        variants: const <ProductVariant>[
+        variants: <ProductVariant>[
           ProductVariant(
             id: 'v',
             productId: 'p',
@@ -165,11 +165,11 @@ void main() {
 
   group('pricing', () {
     test('display price is the cheapest variant when variants exist', () {
-      final product = Product(
+      const product = Product(
         id: 'p',
         name: 'x',
         price: 200,
-        variants: const <ProductVariant>[
+        variants: <ProductVariant>[
           ProductVariant(
             id: 'a',
             productId: 'p',

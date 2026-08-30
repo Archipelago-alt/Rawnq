@@ -58,7 +58,7 @@ class CartScreen extends ConsumerWidget {
                   child: ListView.separated(
                     padding: const EdgeInsets.all(RawnqSpace.lg),
                     itemCount: items.length,
-                    separatorBuilder: (_, __) =>
+                    separatorBuilder: (_, _) =>
                         const SizedBox(height: RawnqSpace.md),
                     itemBuilder: (context, index) {
                       final item = items[index];

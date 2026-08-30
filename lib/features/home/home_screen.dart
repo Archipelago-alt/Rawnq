@@ -43,9 +43,9 @@ class HomeScreen extends ConsumerWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,
                         itemCount: 4,
-                        separatorBuilder: (_, __) =>
+                        separatorBuilder: (_, _) =>
                             const SizedBox(width: RawnqSpace.md),
-                        itemBuilder: (_, __) =>
+                        itemBuilder: (_, _) =>
                             const ShimmerBox(width: 88, height: 108),
                       ),
                     ),

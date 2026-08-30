@@ -42,7 +42,7 @@ class ProductImage extends StatelessWidget {
         memCacheWidth: (decodeWidth * ratio).round(),
         fadeInDuration: const Duration(milliseconds: 220),
         placeholder: (context, _) => const ColoredBox(color: RawnqColors.cream),
-        errorWidget: (context, _, __) => const _ImageFallback(),
+        errorWidget: (context, _, _) => const _ImageFallback(),
       );
     }
 

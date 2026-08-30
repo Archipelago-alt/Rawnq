@@ -20,7 +20,7 @@ class CategoryStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.lg),
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: RawnqSpace.md),
+        separatorBuilder: (_, _) => const SizedBox(width: RawnqSpace.md),
         itemBuilder: (context, index) {
           final category = categories[index];
           return _CategoryChip(category: category);

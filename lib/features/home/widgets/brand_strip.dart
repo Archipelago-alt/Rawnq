@@ -20,7 +20,7 @@ class BrandStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: RawnqSpace.lg),
         itemCount: brands.length,
-        separatorBuilder: (_, __) => const SizedBox(width: RawnqSpace.md),
+        separatorBuilder: (_, _) => const SizedBox(width: RawnqSpace.md),
         itemBuilder: (context, index) {
           final brand = brands[index];
           return Semantics(

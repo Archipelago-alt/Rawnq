@@ -71,10 +71,13 @@ class ProductSliverGridSkeleton extends StatelessWidget {
 SliverGridDelegate productGridDelegate(BuildContext context) {
   final width = MediaQuery.sizeOf(context).width;
   final columns = width >= 720 ? 3 : 2;
-  // Square image + a fixed text block; the ratio keeps the text from
-  // overflowing on the narrowest supported phones.
+  // Square image plus a fixed text block. The allowance errs on the generous
+  // side so font-metric rounding cannot overflow the card on narrow phones.
   final textScale = MediaQuery.textScalerOf(context).scale(14) / 14;
-  final aspectRatio = 1 / (1 + (0.42 * textScale).clamp(0.42, 0.62));
+  final columnWidth =
+      (width - RawnqSpace.lg * 2 - RawnqSpace.lg * (columns - 1)) / columns;
+  final cardHeight = columnWidth + (100 * textScale);
+  final aspectRatio = columnWidth / cardHeight;
 
   return SliverGridDelegateWithFixedCrossAxisCount(
     crossAxisCount: columns,

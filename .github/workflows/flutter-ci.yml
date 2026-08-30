@@ -40,7 +40,7 @@ jobs:
         # previous step and are not checked in.
         run: |
           set -o pipefail
-          if ! dart format --output=none --set-exit-if-changed lib test 2>&1 | tee /tmp/fmt.log; then
+          if ! dart format --output=none --set-exit-if-changed lib test tool 2>&1 | tee /tmp/fmt.log; then
             grep -E '^Changed ' /tmp/fmt.log | head -50 | while IFS= read -r line; do
               echo "::error::$line"
             done

@@ -53,17 +53,15 @@ void main() {
     expect(find.byType(ProductListScreen), findsOneWidget);
 
     // Category listing into the product detail.
-    await tester.tap(find.byType(ProductCard).first);
+    await tapVisible(tester, find.byType(ProductCard).first);
     await settle(tester);
     expect(find.byType(ProductDetailScreen), findsOneWidget);
     expect(find.text(Fixtures.pyjamaWithSizes.name), findsOneWidget);
 
     // Choose the mandatory options and add to the cart.
-    await tester.tap(find.text('خمري غامق').first);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('L'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('أضيفي إلى السلة'));
+    await tapVisible(tester, find.text('خمري غامق').first);
+    await tapVisible(tester, find.text('L'));
+    await tapVisible(tester, find.text('أضيفي إلى السلة'));
     await tester.pump();
 
     expect(container.read(cartProvider), hasLength(1));
@@ -86,7 +84,9 @@ void main() {
     await settle(tester);
     expect(find.byType(ProductListScreen), findsOneWidget);
 
-    await tester.pageBack();
+    // Not tester.pageBack(): it looks for an English "Back" tooltip, and this
+    // app is localised to Arabic.
+    await tester.tap(find.byType(BackButton));
     await settle(tester);
 
     expect(find.byType(CategoriesScreen), findsOneWidget);
@@ -127,7 +127,7 @@ void main() {
 
     expect(find.byType(ProductCard), findsOneWidget);
 
-    await tester.tap(find.byType(ProductCard).first);
+    await tapVisible(tester, find.byType(ProductCard).first);
     await settle(tester);
 
     expect(find.byType(ProductDetailScreen), findsOneWidget);

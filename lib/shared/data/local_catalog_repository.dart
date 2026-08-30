@@ -11,7 +11,7 @@ import 'catalog_repository.dart';
 /// readable storefront taken on 2026-08-29. It is real content, but it is not
 /// live, and the UI labels it as such.
 class LocalCatalogRepository implements CatalogRepository {
-  LocalCatalogRepository({AssetBundle? bundle}) : _bundle = bundle;
+  LocalCatalogRepository({this._bundle});
 
   static const String assetPath = 'assets/data/catalog_snapshot.json';
 

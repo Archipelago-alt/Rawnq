@@ -19,10 +19,10 @@ import 'fixtures.dart';
 /// depend on the live storefront being reachable.
 class FakeCatalogRepository implements CatalogRepository {
   FakeCatalogRepository({
-    Catalog? catalog,
+    this._catalog,
     this.error,
     this.delay = Duration.zero,
-  }) : _catalog = catalog;
+  });
 
   final Catalog? _catalog;
   final Object? error;
@@ -149,24 +149,58 @@ Future<void> scrollTo(
   WidgetTester tester,
   Finder finder, {
   double delta = 300,
-  int maxScrolls = 60,
+  int maxScrolls = 40,
 }) async {
-  await tester.scrollUntilVisible(
-    finder,
-    delta,
-    scrollable: find.byType(Scrollable).first,
-    maxScrolls: maxScrolls,
-  );
+  final scrollable = find.byType(Scrollable).first;
+  // Scroll until the target has actually been built. tester.scrollUntilVisible
+  // is not usable here: it evaluates the finder up front, so a `.first` on a
+  // not-yet-built widget throws before any scrolling happens.
+  for (var i = 0; i < maxScrolls && finder.evaluate().isEmpty; i++) {
+    await tester.drag(scrollable, Offset(0, -delta));
+    await tester.pump();
+  }
   await tester.pumpAndSettle();
+  if (finder.evaluate().isNotEmpty) {
+    await tester.ensureVisible(finder.first);
+    await tester.pumpAndSettle();
+  }
 }
 
-/// Scrolls [finder] into view, then taps it.
+/// Scrolls [finder] clear of the pinned bottom bars, then taps it.
 ///
-/// Product detail is a long scroll on a phone: the option selectors sit below
-/// the fold, and `tester.tap` fails hit-testing on an off-screen widget.
-Future<void> tapVisible(WidgetTester tester, Finder finder) async {
-  await tester.ensureVisible(finder);
-  await tester.pumpAndSettle();
+/// `ensureVisible` only guarantees the widget is inside the viewport, which is
+/// not enough on these screens: product detail pins an add-to-cart bar and the
+/// shell pins a navigation bar over the bottom, so a widget scrolled to the
+/// very bottom is covered and the tap lands on the bar instead.
+///
+/// Widgets that live in those pinned bars have no Scrollable ancestor and are
+/// already visible, so they are tapped directly.
+Future<void> tapVisible(
+  WidgetTester tester,
+  Finder finder, {
+  double bottomInset = 180,
+}) async {
+  final scrollable = Scrollable.maybeOf(tester.element(finder));
+  if (scrollable != null) {
+    await tester.ensureVisible(finder);
+    await tester.pumpAndSettle();
+
+    final screenHeight =
+        tester.view.physicalSize.height / tester.view.devicePixelRatio;
+    final overlap =
+        tester.getRect(finder).bottom - (screenHeight - bottomInset);
+    if (overlap > 0) {
+      final position = Scrollable.of(tester.element(finder)).position;
+      position.jumpTo(
+        (position.pixels + overlap).clamp(
+          position.minScrollExtent,
+          position.maxScrollExtent,
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+  }
+
   await tester.tap(finder);
   await tester.pumpAndSettle();
 }
