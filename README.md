@@ -282,6 +282,17 @@ when no release keystore is configured, so the second artifact installs and
 runs but **must not be distributed**. A distributable build needs a real
 keystore — see [Building](#building).
 
+### Verified status
+
+Run locally against Flutter 3.47.2 / Dart 3.13.2:
+
+| Check | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed` | clean |
+| `flutter analyze` | **No issues found** |
+| `flutter test` | **122 passed, 0 failed** |
+| `flutter build apk` | not run locally — no JDK/Android SDK on the dev machine; CI builds it |
+
 ## Branding assets
 
 | Asset | Path | Status |
