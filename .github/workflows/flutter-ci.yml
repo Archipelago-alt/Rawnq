@@ -1,0 +1,157 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: "3.47.2"
+
+jobs:
+  analyze-and-test:
+    name: Analyze & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v5
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate localisations
+        run: flutter gen-l10n
+
+      - name: Verify formatting
+        # Generated localisations are excluded: they are produced by the
+        # previous step and are not checked in.
+        run: |
+          set -o pipefail
+          if ! dart format --output=none --set-exit-if-changed lib test tool 2>&1 | tee /tmp/fmt.log; then
+            grep -E '^Changed ' /tmp/fmt.log | head -50 | while IFS= read -r line; do
+              echo "::error::$line"
+            done
+            echo "::error::Run 'dart format lib test' and commit the result."
+            exit 1
+          fi
+
+      - name: Analyze
+        run: |
+          set -o pipefail
+          if ! flutter analyze --no-fatal-infos 2>&1 | tee /tmp/analyze.log; then
+            grep -E '^\s*(error|warning)' /tmp/analyze.log | head -50 | while IFS= read -r line; do
+              echo "::error::$line"
+            done
+            exit 1
+          fi
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          if ! flutter test --reporter expanded 2>&1 | tee /tmp/test.log; then
+            python3 tool/annotate_failures.py /tmp/test.log
+            exit 1
+          fi
+
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    # Runs alongside the checks rather than after them: a build failure and a
+    # lint failure are independent signals, and both still gate the PR.
+    timeout-minutes: 40
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v5
+
+      - name: Set up the JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/**/*.gradle*', 'android/**/gradle-wrapper.properties') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Idempotent: a no-op once the platform projects are committed. It exists
+      # so the APK can still be produced from a checkout that predates them.
+      - name: Ensure the Android project exists
+        run: |
+          if [ ! -d android ]; then
+            echo "::notice::Generating the Android project from the Flutter template."
+            flutter create --project-name rawnq --org com.rawnq --platforms=android,ios .
+            rm -f test/widget_test.dart
+            sed -i 's/com\.rawnq\.rawnq/com.rawnq.gaza/g' android/app/build.gradle.kts
+            OLD=$(find android/app/src/main -type d -path '*com/rawnq/rawnq' | head -1)
+            if [ -n "$OLD" ]; then
+              NEW=$(dirname "$(dirname "$(dirname "$OLD")")")/com/rawnq/gaza
+              mkdir -p "$NEW" && mv "$OLD"/* "$NEW"/
+              sed -i 's/^package com\.rawnq\.rawnq$/package com.rawnq.gaza/' "$NEW"/*.kt
+            fi
+          fi
+
+      - name: Build debug APK
+        run: |
+          set -o pipefail
+          if ! flutter build apk --debug 2>&1 | tee /tmp/build.log; then
+            # Surface compile errors as annotations so they are readable on the
+            # pull request without opening the raw log.
+            if grep -qE ': Error:' /tmp/build.log; then
+              grep -E ': Error:' /tmp/build.log | head -40 | while IFS= read -r line; do
+                echo "::error::$line"
+              done
+            else
+              tail -30 /tmp/build.log | while IFS= read -r line; do echo "::error::$line"; done
+            fi
+            exit 1
+          fi
+
+      # Release build for install testing. Flutter's generated Gradle config
+      # signs release with the debug key when no keystore is configured, so
+      # this APK is NOT distributable — see README for release signing.
+      - name: Build release APK (debug-signed, not for distribution)
+        run: flutter build apk --release
+
+      - name: Upload the debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: rawnq-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload the release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: rawnq-release-apk-debug-signed
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 14

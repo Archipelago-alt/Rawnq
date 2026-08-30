@@ -1,0 +1,184 @@
+{
+  "@@locale": "ar",
+
+  "storeSlogan": "لأنكِ تستحقين الأجمل",
+
+  "navHome": "الرئيسية",
+  "navCategories": "الفئات",
+  "navSearch": "البحث",
+  "navFavorites": "المفضلة",
+  "navCart": "السلة",
+  "navContact": "تواصل معنا",
+
+  "homeShopByCategory": "تسوّقي حسب الفئة",
+  "homeShopByBrand": "تسوّقي حسب العلامة التجارية",
+  "homeNewArrivals": "وصل حديثاً",
+  "homeAllProducts": "كل المنتجات",
+  "homeViewAll": "عرض الكل",
+  "homeProductCount": "{count, plural, =0{لا توجد منتجات} =1{منتج واحد} =2{منتجان} few{{count} منتجات} other{{count} منتجاً}}",
+  "@homeProductCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "categoriesTitle": "الفئات",
+
+  "productDetailsTitle": "تفاصيل المنتج",
+  "productChooseColor": "اختاري اللون",
+  "productChooseSize": "اختاري المقاس",
+  "productDescription": "الوصف",
+  "productMaterial": "الخامة",
+  "productBrand": "العلامة التجارية",
+  "productAvailable": "متوفر",
+  "productUnavailable": "غير متوفر",
+  "productOutOfStockOption": "هذا الخيار غير متوفر حالياً",
+  "productSelectColorFirst": "الرجاء اختيار اللون أولاً",
+  "productSelectSizeFirst": "الرجاء اختيار المقاس أولاً",
+  "productAddToCart": "أضيفي إلى السلة",
+  "productAddedToCart": "تمت الإضافة إلى السلة",
+  "productBadgeNew": "جديد",
+  "productBadgeSale": "خصم {percent}%",
+  "@productBadgeSale": {
+    "placeholders": { "percent": { "type": "int" } }
+  },
+  "productImageCounter": "{current} من {total}",
+  "@productImageCounter": {
+    "placeholders": { "current": { "type": "int" }, "total": { "type": "int" } }
+  },
+
+  "searchTitle": "البحث",
+  "searchHint": "ابحثي عن فستان، بجامة، قميص…",
+  "searchNoResults": "لا توجد نتائج لبحثك",
+  "searchNoResultsHint": "جرّبي كلمات أخرى أو تصفّحي الفئات",
+  "searchStartHint": "اكتبي اسم المنتج الذي تبحثين عنه",
+  "searchResultCount": "{count, plural, =0{لا توجد نتائج} =1{نتيجة واحدة} =2{نتيجتان} few{{count} نتائج} other{{count} نتيجة}}",
+  "@searchResultCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
+  "filtersTitle": "الفلاتر والترتيب",
+  "filterBrand": "العلامة التجارية",
+  "filterAll": "الكل",
+  "filterOnlyAvailable": "المتوفر فقط",
+  "filterOnlyNew": "الجديد فقط",
+  "filterApply": "تطبيق",
+  "filterReset": "إعادة التعيين",
+  "sortTitle": "الترتيب",
+  "sortDefault": "الافتراضي",
+  "sortPriceAsc": "السعر: من الأقل للأعلى",
+  "sortPriceDesc": "السعر: من الأعلى للأقل",
+  "sortNameAsc": "الاسم: أ إلى ي",
+  "sortNewest": "الأحدث أولاً",
+
+  "favoritesTitle": "المفضلة",
+  "favoritesEmpty": "قائمة المفضلة فارغة",
+  "favoritesEmptyHint": "اضغطي على القلب في أي منتج لحفظه هنا",
+  "favoritesAdded": "أُضيف إلى المفضلة",
+  "favoritesRemoved": "أُزيل من المفضلة",
+  "favoritesAddLabel": "إضافة إلى المفضلة",
+  "favoritesRemoveLabel": "إزالة من المفضلة",
+
+  "cartTitle": "سلة التسوق",
+  "cartEmpty": "سلتك فارغة",
+  "cartEmptyHint": "تصفّحي المنتجات وأضيفي ما يعجبك",
+  "cartStartShopping": "ابدئي التسوق",
+  "cartSubtotal": "المجموع الفرعي",
+  "cartDelivery": "التوصيل",
+  "cartTotal": "الإجمالي",
+  "cartFreeDelivery": "مجاني",
+  "cartCheckout": "متابعة الطلب",
+  "cartRemove": "إزالة",
+  "cartRemoved": "تمت إزالة المنتج",
+  "cartUndo": "تراجع",
+  "cartClear": "إفراغ السلة",
+  "cartClearConfirmTitle": "إفراغ السلة؟",
+  "cartClearConfirmBody": "سيتم حذف جميع المنتجات من سلتك.",
+  "cartMaxQuantityReached": "الكمية المتاحة من هذا المنتج هي {max}",
+  "@cartMaxQuantityReached": {
+    "placeholders": { "max": { "type": "int" } }
+  },
+  "cartItemCount": "{count, plural, =0{لا توجد منتجات} =1{منتج واحد} =2{منتجان} few{{count} منتجات} other{{count} منتجاً}}",
+  "@cartItemCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "cartIncrease": "زيادة الكمية",
+  "cartDecrease": "إنقاص الكمية",
+
+  "checkoutTitle": "إتمام الطلب",
+  "checkoutYourDetails": "بياناتك",
+  "checkoutName": "الاسم الكامل",
+  "checkoutPhone": "رقم الجوال",
+  "checkoutPhoneHint": "مثال: 0593208117",
+  "checkoutNotes": "ملاحظات على الطلب (اختياري)",
+  "checkoutDelivery": "منطقة التوصيل",
+  "checkoutPayment": "طريقة الدفع",
+  "checkoutSummary": "ملخص الطلب",
+  "checkoutSend": "إرسال الطلب عبر واتساب",
+  "checkoutOpenWebsite": "إتمام الطلب على الموقع",
+  "checkoutErrorName": "الرجاء إدخال الاسم الكامل",
+  "checkoutErrorPhone": "الرجاء إدخال رقم جوال صحيح",
+  "checkoutErrorDelivery": "الرجاء اختيار منطقة التوصيل",
+  "checkoutErrorPayment": "الرجاء اختيار طريقة الدفع",
+  "checkoutSending": "جارٍ التحضير…",
+  "checkoutNoPaymentProcessing": "لا يتم تحصيل أي مبلغ داخل التطبيق. يتم تأكيد الطلب والدفع مع المتجر مباشرة.",
+
+  "orderSuccessTitle": "تم إرسال طلبك",
+  "orderSuccessBody": "سيتواصل معك فريق رونق على واتساب لتأكيد الطلب وموعد التوصيل.",
+  "orderSuccessReference": "رقم مرجعي: {reference}",
+  "@orderSuccessReference": {
+    "placeholders": { "reference": { "type": "String" } }
+  },
+  "orderSuccessContinue": "متابعة التسوق",
+  "orderSuccessContactUs": "تواصلي معنا",
+
+  "contactTitle": "تواصلي معنا",
+  "contactWhatsapp": "واتساب",
+  "contactCall": "اتصال هاتفي",
+  "contactInstagram": "إنستغرام",
+  "contactWebsite": "زيارة الموقع",
+  "contactStoreInfo": "معلومات المتجر",
+  "contactCountry": "الدولة",
+  "contactCurrency": "العملة",
+  "contactDeliveryAreas": "مناطق التوصيل",
+  "contactPaymentMethods": "طرق الدفع",
+
+  "policyPrivacyTitle": "سياسة الخصوصية",
+  "policyTermsTitle": "الشروط والأحكام",
+  "policyNotPublished": "لم ينشر المتجر هذا النص بعد",
+  "policyNotPublishedHint": "يمكنك الاطلاع على النسخة المنشورة على موقع المتجر.",
+  "policyOpenOnWebsite": "فتح على الموقع",
+
+  "stateErrorOffline": "لا يوجد اتصال بالإنترنت",
+  "stateErrorOfflineHint": "تحقّقي من الاتصال ثم أعيدي المحاولة",
+  "stateErrorTimeout": "استغرق الاتصال وقتاً طويلاً",
+  "stateErrorServer": "المتجر غير متاح حالياً",
+  "stateErrorGeneric": "حدث خطأ غير متوقع",
+  "stateRetry": "إعادة المحاولة",
+  "stateEmptyProducts": "لا توجد منتجات في هذا القسم",
+  "stateEmptyProductsHint": "تصفّحي بقية الأقسام",
+  "stateImageUnavailable": "الصورة غير متاحة",
+
+  "offlineBannerTitle": "أنت غير متصلة بالإنترنت",
+  "localDataBanner": "بيانات محلية للتجربة — لُقطة من المتجر بتاريخ {date}",
+  "@localDataBanner": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+
+  "poweredBy": "مدعوم من BringUs",
+
+  "whatsappOrderHeader": "طلب جديد من تطبيق رونق",
+  "whatsappOrderItems": "المنتجات",
+  "whatsappOrderCustomer": "الاسم",
+  "whatsappOrderPhone": "الجوال",
+  "whatsappOrderArea": "منطقة التوصيل",
+  "whatsappOrderPayment": "طريقة الدفع",
+  "whatsappOrderNotes": "ملاحظات",
+  "whatsappOrderSubtotal": "المجموع الفرعي",
+  "whatsappOrderDeliveryFee": "رسوم التوصيل",
+  "whatsappOrderTotal": "الإجمالي",
+  "whatsappOrderColor": "اللون",
+  "whatsappOrderSize": "المقاس",
+  "whatsappOrderQuantity": "الكمية",
+
+  "errorCannotOpenLink": "تعذّر فتح الرابط",
+  "closeLabel": "إغلاق"
+}
